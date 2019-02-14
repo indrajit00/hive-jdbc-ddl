@@ -10,6 +10,7 @@ public class HiveDbDesc {
 	private String dbLocation;
 	private Map<String,String> owner;
 	
+	 
 	public String getDatabaseName() {
 		return databaseName;
 	}

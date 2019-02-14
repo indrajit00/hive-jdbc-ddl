@@ -20,7 +20,7 @@ public class HiveUtility {
 	private static Statement state;
 	private static Connection connect;
 
-	private HiveUtility() {}// Constructor
+	private HiveUtility() {} // Constructor
 
 	// Method for connection establishment
 	public static void checkCon() throws SQLException {

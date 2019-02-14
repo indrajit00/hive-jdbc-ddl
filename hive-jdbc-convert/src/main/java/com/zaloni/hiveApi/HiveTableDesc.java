@@ -3,7 +3,8 @@ package com.zaloni.hiveApi;
 import java.util.List;
 
 public class HiveTableDesc {
-
+ 
+	//Details of table
 	private String databaseName;
 	private String tableName;
 	private String newTableName;

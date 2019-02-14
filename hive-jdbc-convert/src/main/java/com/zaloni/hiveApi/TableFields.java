@@ -1,6 +1,7 @@
 package com.zaloni.hiveApi;
 
 public class TableFields {
+ 
 	private String columnName;
 	private HiveDataType columnType;
 	private String comment;
