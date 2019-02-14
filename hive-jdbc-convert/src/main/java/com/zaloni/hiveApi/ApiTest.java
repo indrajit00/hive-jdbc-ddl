@@ -39,7 +39,7 @@ public class ApiTest {
 		TableFields field1 = new TableFields();
 		field1.setColumnName("Id");
 		field1.setColumnType(HiveDataType.HATI);
-		field1.setComment("This is id field");
+		field1.setComment("This is an id field");
 		fields.add(field1);
 		
 		
