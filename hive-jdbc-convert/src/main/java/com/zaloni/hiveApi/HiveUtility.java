@@ -31,7 +31,7 @@ public class HiveUtility {
 			e.printStackTrace();
 			System.exit(1);
 		}
-		connect = DriverManager.getConnection("jdbc:hive2://localhost:10000/default", "", "");
+		connect = DriverManager.getConnection("jdbc:hive2://192.168.1.135:10000", "zaloni", "zaloni");
 				System.out.println("!!!Connection established successfully!!!");
 	}
 
@@ -224,6 +224,38 @@ public class HiveUtility {
 
 	}
 
+	/***
+	 * Method for alter(Add column to the table)
+	 * 
+	 * @throws SQLException
+	 **/
+	public static void addcol(HiveTableDesc add){
+		
+		StringBuffer addcol = new StringBuffer("alter table ")
+		.append(add.getDatabaseName());
+		addcol.append(".")
+		.append(add.getTableName());
+		addcol.append(" ADD column ");
+		addcol.append("(");
+		List<TableFields> columnList = add.getColumn();
+		for (int i = 0; i < columnList.size(); i++) {
+			  addcol.append(columnList.get(i).getColumnName())
+					.append(" ")
+					.append(columnList.get(i).getColumnType())
+					.append(" ")
+					.append(" COMMENT ")
+					.append(" '")
+					.append(columnList.get(i).getComment())
+					.append(" ',");
+			}
+		
+		
+		addcol.append(")");
+		System.out.println("column added");
+		
+		}
+	
+	
 	/***
 	 * Method for alter table properties
 	 * 

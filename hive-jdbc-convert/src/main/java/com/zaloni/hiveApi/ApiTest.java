@@ -18,19 +18,21 @@ public class ApiTest {
 
 		HiveUtility.showDb();
 		
-		/*
+		
 		HiveDbDesc Db=new HiveDbDesc();
-		Db.setDatabaseName("New_Database");
+		Db.setDatabaseName("New_Database_rm");
 		Db.setDbComments("This_is_a_new_Database");
 		
-		Map<String,String> dbPro=new HashMap<String,String>();
+		/*Map<String,String> dbPro=new HashMap<String,String>();
 		dbPro.put("Propert1_Name", "Property1_Value");
 		dbPro.put("Propert2_Name", "Property2_Value");
 		Db.setDbProperties(dbPro);
 		
 		HiveUty.createDb(Db);
 	*/
+		HiveUtility.createDb(Db);
 		
+		HiveUtility.showDb();
 		
 		
 		//Create Table
@@ -38,7 +40,7 @@ public class ApiTest {
 		
 		TableFields field1 = new TableFields();
 		field1.setColumnName("Id");
-		field1.setColumnType(HiveDataType.HATI);
+		field1.setColumnType(HiveDataType.INT);
 		field1.setComment("This is an id field");
 		fields.add(field1);
 		
@@ -49,7 +51,7 @@ public class ApiTest {
 		table.setDatabaseName("zaloni");
 		table.setTableName("table32");
 		table.setColumn(fields);
-		HiveUtility.createTable(table);
+		//HiveUtility.createTable(table);
 	
 		
 		
