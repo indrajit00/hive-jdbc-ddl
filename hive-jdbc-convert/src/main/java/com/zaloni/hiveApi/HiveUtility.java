@@ -31,7 +31,7 @@ public class HiveUtility {
 			e.printStackTrace();
 			System.exit(1);
 		}
-		connect = DriverManager.getConnection("jdbc:hive2://localhost:10000/default", "", "");
+		connect = DriverManager.getConnection("jdbc:hive2://192.168.1.135:10000", "zaloni", "zaloni");
 				System.out.println("!!!Connection established successfully!!!");
 	}
 
@@ -185,13 +185,25 @@ public class HiveUtility {
 
 			for (int i = 0; i < columnList.size(); i++) {
 				createHql.append(columnList.get(i).getColumnName())
-						.append(" ")
-						.append(columnList.get(i).getColumnType())
-						.append(" ")
-						.append(" COMMENT ")
-						.append(" '")
-						.append(columnList.get(i).getComment())
-						.append(" ',");
+						.append(" ");
+						if (StringUtils.isNotBlank(columnList.get(i).getColumnType().getPrecision())&&StringUtils.isNotBlank(columnList.get(i).getColumnType().getScale())) 
+						{
+							createHql.append(columnList.get(i).getColumnType())
+									.append("(")
+									.append(columnList.get(i).getColumnType().getPrecision())
+									.append(",")
+									.append(columnList.get(i).getColumnType().getScale())
+									.append(")");
+						}
+						else 
+						{
+							createHql.append(columnList.get(i).getColumnType())
+									.append(" ")
+									.append(" COMMENT ")
+									.append(" '")
+									.append(columnList.get(i).getComment())
+									.append(" ',");
+						}
 				}
 				createHql.deleteCharAt(createHql.length() - 1);
 				createHql.append(")");
@@ -248,10 +260,11 @@ public class HiveUtility {
 	 * 
 	 * @throws SQLException
 	 **/
-	public static void setSerdeProperty(String tbName,
-			Map<String, String> serdeProperty) throws SQLException {
-		StringBuffer createHql = new StringBuffer("alter table " + tbName
-				+ " set serdeproperties (");
+	public static void setSerdeProperty(String tbName,Map<String, String> serdeProperty) throws SQLException {
+		StringBuffer createHql = new StringBuffer("alter table ")
+					.append(tbName)
+					.append(" ")
+					.append(" set serdeproperties (");
 		for (Map.Entry m : serdeProperty.entrySet()) {
 			createHql.append("'" + m.getKey() + "'" + "=" + "'" + m.getValue()
 					+ "'");
@@ -269,9 +282,7 @@ public class HiveUtility {
 	 * 
 	 * @throws SQLException
 	 **/
-	public static void setStorageProperty(String tbName,
-			Map<String, String> storageProperty, String numBuckets)
-			throws SQLException {
+	public static void setStorageProperty(String tbName,Map<String, String> storageProperty, String numBuckets)throws SQLException {
 		StringBuffer createHql = new StringBuffer("alter table " + tbName
 				+ " clustered by (");
 		for (Map.Entry m : storageProperty.entrySet()) {
@@ -354,6 +365,83 @@ public class HiveUtility {
 		ResultSet output=state.executeQuery("describe formatted "+tb.getTableName());
 		while(output.next())
 	System.out.println(output.getString(1)+" "+output.getString(2));
+	}
+		
+
+	/***
+	 * Method for Alter Column
+	 * 
+	 * @throws SQLException
+	 **/
+	public static void alterColumn(HiveTableDesc tb) throws SQLException {
+		List<TableFields> tableField=tb.getColumn();
+		StringBuffer createHql= new StringBuffer(" ALTER TABLE ");
+		for(int i=0;i<=tableField.size();i++) {
+			createHql.append(tb.getTableName())
+					.append(" CHANGE COLUMN ")
+					.append(tableField.get(i).getColumnName())
+					.append(" ")
+					.append(tableField.get(i).getColumnNewName());
+					if(StringUtils.isNotBlank(tableField.get(i).getColumnType().getPrecision())&&StringUtils.isNotBlank(tableField.get(i).getColumnType().getScale()))
+					{
+						createHql.append(tableField.get(i).getColumnType())
+						.append("(")
+						.append(tableField.get(i).getColumnType().getPrecision())
+						.append(",")
+						.append(tableField.get(i).getColumnType().getScale())
+						.append(")");
+					}
+					else
+					{
+						createHql.append(tableField.get(i).getColumnType())
+						.append(" COMMENT ")
+						.append(" '")
+						.append(tableField.get(i).getComment())
+						.append("'");
+					}
+					createHql.append(")");
+					System.out.println(createHql);
+					state.execute(createHql.toString());
+		}
+		
+	}
 	
-}
+	/***
+	 * Method for Replace Column
+	 * 
+	 * @throws SQLException
+	 **/
+	public static void replaceColumn(HiveTableDesc tb) throws SQLException
+	{
+		List<TableFields> tableField=tb.getColumn();
+		StringBuffer createHql= new StringBuffer(" ALTER TABLE ");
+		for(int i=0;i<=tableField.size();i++) {
+			createHql.append(tb.getTableName())
+					.append(" REPLACE COLUMNS (")
+					.append(tableField.get(i).getColumnName())
+					.append(" ");
+					if(StringUtils.isNotBlank(tableField.get(i).getColumnType().getPrecision())&&StringUtils.isNotBlank(tableField.get(i).getColumnType().getScale()))
+					{
+						createHql.append(tableField.get(i).getColumnType())
+						.append("(")
+						.append(tableField.get(i).getColumnType().getPrecision())
+						.append(",")
+						.append(tableField.get(i).getColumnType().getScale())
+						.append(")");
+					}
+					else
+					{
+						createHql.append(tableField.get(i).getColumnType())
+						.append(" COMMENT ")
+						.append(" '")
+						.append(tableField.get(i).getComment())
+						.append(",");
+					}
+					createHql.deleteCharAt(createHql.length() - 1);
+					createHql.append(")");
+					System.out.println(createHql);
+					state.execute(createHql.toString());
+		}
+	}
+		
 }

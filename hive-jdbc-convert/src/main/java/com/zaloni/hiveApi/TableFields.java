@@ -2,7 +2,8 @@ package com.zaloni.hiveApi;
 
 public class TableFields {
 	private String columnName;
-	private HiveDataType columnType;
+	private String columnNewName;
+	private DataType columnType;
 	private String comment;
 	
 
@@ -14,12 +15,13 @@ public class TableFields {
 		this.columnName = columnName;
 	}
 
-	public HiveDataType getColumnType() {
+	public DataType getColumnType() {
 		return columnType;
 	}
 
-	public void setColumnType(HiveDataType columnType) {
+	public void setColumnType(DataType columnType) {
 		this.columnType = columnType;
+		
 	}
 
 	public String getComment() {
@@ -29,5 +31,15 @@ public class TableFields {
 	public void setComment(String comment) {
 		this.comment = comment;
 	}
+
+	public String getColumnNewName() {
+		return columnNewName;
+	}
+
+	public void setColumnNewName(String columnNewName) {
+		this.columnNewName = columnNewName;
+	}
+
+	
 
 }

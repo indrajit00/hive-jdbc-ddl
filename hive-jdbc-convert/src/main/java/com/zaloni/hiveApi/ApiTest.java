@@ -38,7 +38,11 @@ public class ApiTest {
 		
 		TableFields field1 = new TableFields();
 		field1.setColumnName("Id");
-		field1.setColumnType(HiveDataType.HATI);
+		DataType dType= new DataType();
+		dType.setDataType(HiveDataType.DECIMAL);
+		dType.setPrecision("10");
+		dType.setScale("4");
+		field1.setColumnType(dType);
 		field1.setComment("This is id field");
 		fields.add(field1);
 		
@@ -47,7 +51,7 @@ public class ApiTest {
 		
 		HiveTableDesc table = new HiveTableDesc();
 		table.setDatabaseName("zaloni");
-		table.setTableName("table32");
+		table.setTableName("table38");
 		table.setColumn(fields);
 		HiveUtility.createTable(table);
 	
