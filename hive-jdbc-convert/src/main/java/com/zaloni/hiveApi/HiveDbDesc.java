@@ -10,6 +10,7 @@ public class HiveDbDesc {
 	private boolean ifNotExists;
 	private String dbLocation;
 	private Map<String,String> owner;
+	private String dropType;
 	
 	public String getDatabaseName() {
 		return databaseName;
@@ -47,6 +48,12 @@ public class HiveDbDesc {
 	}
 	public void setOwner(Map<String, String> owner) {
 		this.owner = owner;
+	}
+	public String getDropType() {
+		return dropType;
+	}
+	public void setDropType(String dropType) {
+		this.dropType = dropType;
 	}
 
 }

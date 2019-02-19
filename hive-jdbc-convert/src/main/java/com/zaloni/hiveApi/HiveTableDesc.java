@@ -13,6 +13,7 @@ public class HiveTableDesc {
 	private List<TableFields> column;
 	private String rowFormat;
 	private String storedAs;
+	private String fieldsTerminatedBy;
 	
 	
 	//Detailed Table Information fields
@@ -20,8 +21,9 @@ public class HiveTableDesc {
 	private String lastAccessTime;
 	private String protectedMOde;
 	private String retention;
-	private String tableType;
+	private boolean externalTable;
 	private String tableParameters;
+	private String dropType;
 	
 	//Table Storage information fields
 	private String serDeLibrary;
@@ -105,12 +107,12 @@ public class HiveTableDesc {
 		this.retention = retention;
 	}
 
-	public String getTableType() {
-		return tableType;
+	public boolean getExternalTable() {
+		return externalTable;
 	}
 
-	public void setTableType(String tableType) {
-		this.tableType = tableType;
+	public void setTableType(boolean externalTable) {
+		this.externalTable = externalTable;
 	}
 
 	public String getTableParameters() {
@@ -207,6 +209,26 @@ public class HiveTableDesc {
 
 	public void setNewTableName(String newTableName) {
 		this.newTableName = newTableName;
+	}
+
+	public String getFieldsTerminatedBy() {
+		return fieldsTerminatedBy;
+	}
+
+	public void setFieldsTerminatedBy(String fieldsTerminatedBy) {
+		this.fieldsTerminatedBy = fieldsTerminatedBy;
+	}
+
+	public String getDropType() {
+		return dropType;
+	}
+
+	public void setDropType(String dropType) {
+		this.dropType = dropType;
+	}
+
+	public void setExternalTable(boolean externalTable) {
+		this.externalTable = externalTable;
 	}
 
 

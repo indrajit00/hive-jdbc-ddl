@@ -26,7 +26,7 @@ public class HiveUtility {
 	
 
 	// Method for connection establishment
-	public static void checkCon() throws SQLException {
+	public static void establishConnection() throws SQLException {
 		try {
 			Class.forName(driver);
 		} catch (ClassNotFoundException e) {
@@ -34,7 +34,7 @@ public class HiveUtility {
 			e.printStackTrace();
 			System.exit(1);
 		}
-		connect = DriverManager.getConnection("jdbc:hive2://192.168.1.135:10000","zaloni","zaloni");
+		connect = DriverManager.getConnection("jdbc:hive2://localhost:10000/default", "", "");
 				System.out.println("!!!Connection established successfully!!!");
 	}
 
@@ -92,6 +92,25 @@ public class HiveUtility {
 		System.out.println(db.getDatabaseName() + " is created sucessfully");
 	}
 
+	/***
+	 * Method for Dropping a Database
+	 * 
+	 * @throws SQLException
+	 **/
+	public static void dropDatabase(HiveDbDesc db) throws SQLException
+	{
+		StringBuffer createHql= new StringBuffer("DROP DATABASE ")
+							.append(db.getDatabaseName());
+		if(StringUtils.isNotBlank(db.getDropType()))
+		{
+					createHql.append(" ")
+							.append(db.getDropType());
+		}
+		state.execute(createHql.toString());
+		System.out.println(db.getDatabaseName()+" is dropped successfully");
+	}
+	
+	
 	/***
 	 * Method for Using a Database
 	 * 
@@ -181,10 +200,14 @@ public class HiveUtility {
 		try {
 			List<TableFields> columnList = tableDesc.getColumn();
 			StringBuffer createHql = new StringBuffer("CREATE TABLE ")
-				.append(tableDesc.getDatabaseName())
-				.append(".")
-				.append(tableDesc.getTableName())
-				.append("( ");
+								.append(tableDesc.getDatabaseName())
+								.append(".");
+			if(tableDesc.getExternalTable()==true)
+			{
+						createHql.append(" EXTERNAL ");
+			}
+						createHql.append(tableDesc.getTableName())
+								.append("( ");
 
 			for (int i = 0; i < columnList.size(); i++) {
 				createHql.append(columnList.get(i).getColumnName())
@@ -197,19 +220,46 @@ public class HiveUtility {
 									.append(",")
 									.append(columnList.get(i).getColumnType().getScale())
 									.append(")");
+									
 						}
 						else 
 						{
-							createHql.append(columnList.get(i).getColumnType())
-									.append(" ")
-									.append(" COMMENT ")
-									.append(" '")
-									.append(columnList.get(i).getComment())
-									.append(" ',");
+							createHql.append(columnList.get(i).getColumnType());
 						}
+							createHql.append(" ")
+									.append(" COMMENT ")
+									.append("'")
+									.append(columnList.get(i).getComment())
+									.append("'")
+									.append(",");
 				}
-				createHql.deleteCharAt(createHql.length() - 1);
-				createHql.append(")");
+							createHql.deleteCharAt(createHql.length() - 1);
+							createHql.append(")");
+				if(StringUtils.isNotBlank(tableDesc.getRowFormat()))
+						{
+							createHql.append(" ROW FORMAT ")
+									.append(tableDesc.getRowFormat())
+									.append(" ");
+						}
+				if(StringUtils.isNotBlank(tableDesc.getFieldsTerminatedBy()))
+				{
+					createHql.append(" FIELDS TERMINATED BY ")
+							.append("'")
+							.append(tableDesc.getFieldsTerminatedBy())
+							.append("' ");
+				}
+				if(StringUtils.isNotBlank(tableDesc.getStoredAs()))
+				{
+							createHql.append(" ")
+									.append(tableDesc.getStoredAs())
+									.append(" ");
+				}
+				if(StringUtils.isNotBlank(tableDesc.getLocation()))
+				{
+							createHql.append(" '")
+									.append(tableDesc.getLocation())
+									.append("' ");
+				}
 				System.out.println(createHql);
 				state.execute(createHql.toString());
 				System.out.println(tableDesc.getTableName()+" * is created Successfully");
@@ -221,6 +271,25 @@ public class HiveUtility {
 
 	}
 
+	/***
+	 * Method for Dropping a Table
+	 * 
+	 * @throws SQLException
+	 **/
+	public static void dropTable(HiveTableDesc tb) throws SQLException
+	{
+		StringBuffer createHql= new StringBuffer("DROP TABLE ")
+							.append(tb.getTableName());
+		if(StringUtils.isNotBlank(tb.getDropType()))
+		{
+					createHql.append(" ")
+							.append(tb.getDropType());
+		}
+		state.execute(createHql.toString());
+		System.out.println(tb.getTableName()+" is dropped successfully");
+	}
+	
+	
 	/***
 	 * Method for alter(Rename a table)
 	 * 

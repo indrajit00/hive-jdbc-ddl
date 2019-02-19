@@ -15,7 +15,7 @@ import com.zaloni.hiveApi.HiveUtility;
 public class ApiTest {
 
 	public static void main(String[] args) throws SQLException {
-		HiveUtility.checkCon();
+		HiveUtility.establishConnection();
 
 		HiveUtility.showDb();
 		
@@ -43,7 +43,7 @@ public class ApiTest {
 		DataType dType= new DataType();
 		dType.setDataType(HiveDataType.DECIMAL);
 		dType.setPrecision("10");
-		dType.setScale("4");
+		dType.setScale("2");
 		field1.setColumnType(dType);
 		field1.setComment("This is id field");
 		fields.add(field1);
@@ -53,7 +53,7 @@ public class ApiTest {
 		
 		HiveTableDesc table = new HiveTableDesc();
 		table.setDatabaseName("zaloni");
-		table.setTableName("table38");
+		table.setTableName("table444");
 		table.setColumn(fields);
 		HiveUtility.createTable(table);
 	
