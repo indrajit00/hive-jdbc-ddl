@@ -21,6 +21,9 @@ public class HiveUtility {
 	private static Connection connect;
 
 	private HiveUtility() {}// Constructor
+	
+	
+	
 
 	// Method for connection establishment
 	public static void checkCon() throws SQLException {

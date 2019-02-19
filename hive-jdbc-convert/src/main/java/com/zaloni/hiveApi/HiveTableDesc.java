@@ -2,6 +2,7 @@ package com.zaloni.hiveApi;
 
 import java.util.List;
 
+
 public class HiveTableDesc {
 
 	private String databaseName;

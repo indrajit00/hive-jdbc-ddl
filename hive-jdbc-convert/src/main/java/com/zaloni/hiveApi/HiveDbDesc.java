@@ -2,6 +2,7 @@ package com.zaloni.hiveApi;
 
 import java.util.Map;
 
+
 public class HiveDbDesc {
 	private String databaseName;
 	private String dbComments;

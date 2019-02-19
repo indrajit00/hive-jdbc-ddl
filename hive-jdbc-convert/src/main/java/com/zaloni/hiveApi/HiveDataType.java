@@ -5,6 +5,7 @@ public enum HiveDataType {
 	
 		INT,CHAR,VARCHAR,STRING,BOOLEAN,FLOAT,DOUBLE,DECIMAL;
 
+
 	
 	
 }

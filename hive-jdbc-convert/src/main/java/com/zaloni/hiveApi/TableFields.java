@@ -6,6 +6,7 @@ public class TableFields {
 	private DataType columnType;
 	private String comment;
 	
+	
 
 	public String getColumnName() {
 		return columnName;
