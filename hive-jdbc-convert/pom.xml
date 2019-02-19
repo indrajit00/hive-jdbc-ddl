@@ -6,26 +6,35 @@
 	<version>0.0.1-SNAPSHOT</version>
 	<name>hiveApi</name>
 	<properties>
+
 	<java.version>1.8</java.version>
+
+		<java.version>1.8</java.version>
+
 	</properties>
 	<dependencies>
+	<!-- 
+<dependency>
+<groupId>jdk.tools</groupId>
+  <artifactId>jdk.tools</artifactId>
+  <version>1.6</version>
+</dependency> -->
 
-
-	<!-- https://mvnrespository.com/artifact/org.apache.hadoop/hadoop-core -->
+		<!-- https://mvnrespository.com/artifact/org.apache.hadoop/hadoop-core -->
 		<dependency>
 			<groupId>org.apache.hadoop</groupId>
 			<artifactId>hadoop-core</artifactId>
 			<version>0.20.2</version>
 		</dependency>
-		
+
 		<!-- https://mvnrespository.com/artifact/org.apache.hadoop/hadoop-common -->
 		<dependency>
 			<groupId>org.apache.hadoop</groupId>
 			<artifactId>hadoop-common</artifactId>
 			<version>2.6.0</version>
 		</dependency>
-		
-		
+
+
 
 		<!-- https://mvnrespository.com/artifact/org.apache.hive/hive-jdbc -->
 		<dependency>

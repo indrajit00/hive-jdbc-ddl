@@ -1,1 +1,5 @@
 /target/
+<<<<<<< HEAD
+=======
+/bin/
+>>>>>>> branch 'master' of https://github.com/zaloni-internship/hive-jdbc-ddl.git

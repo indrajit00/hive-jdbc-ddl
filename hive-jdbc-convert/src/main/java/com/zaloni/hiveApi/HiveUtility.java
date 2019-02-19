@@ -1,3 +1,4 @@
+
 package com.zaloni.hiveApi;
 
 import java.sql.Connection;
@@ -359,16 +360,7 @@ public class HiveUtility {
 		System.out.println("Table Storage properties has been updated successfuly");
 	}
 	
-	/***
-	 * Method for Table Properties
-	 * 
-	 * @throws SQLException
-	 **/
-	public static void tableDescription(HiveTableDesc tb) throws SQLException{
-		ResultSet output=state.executeQuery("describe formatted "+tb.getTableName());
-		while(output.next())
-	System.out.println(output.getString(1)+" "+output.getString(2));
-	}
+	
 		
 
 	/***
