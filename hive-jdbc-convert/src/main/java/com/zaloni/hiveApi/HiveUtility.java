@@ -1,4 +1,3 @@
-
 package com.zaloni.hiveApi;
 
 import java.sql.Connection;
@@ -35,7 +34,7 @@ public class HiveUtility {
 			e.printStackTrace();
 			System.exit(1);
 		}
-		connect = DriverManager.getConnection("jdbc:hive2://192.168.1.135:10000", "zaloni", "zaloni");
+		connect = DriverManager.getConnection("jdbc:hive2://192.168.1.135:10000","zaloni","zaloni");
 				System.out.println("!!!Connection established successfully!!!");
 	}
 
@@ -192,7 +191,7 @@ public class HiveUtility {
 						.append(" ");
 						if (StringUtils.isNotBlank(columnList.get(i).getColumnType().getPrecision())&&StringUtils.isNotBlank(columnList.get(i).getColumnType().getScale())) 
 						{
-							createHql.append(columnList.get(i).getColumnType())
+							createHql.append(columnList.get(i).getColumnType().getDataType())
 									.append("(")
 									.append(columnList.get(i).getColumnType().getPrecision())
 									.append(",")
