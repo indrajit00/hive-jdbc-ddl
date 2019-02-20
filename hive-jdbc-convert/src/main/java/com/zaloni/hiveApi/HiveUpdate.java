@@ -24,7 +24,7 @@ public class HiveUpdate {
 	private static Statement state;
 	private static Connection connect;
 	
-	private HiveUpdate(){}//Constructor
+	private HiveUpdate(){}
 	
 	/***
 	 * Method for Dropping a Database
