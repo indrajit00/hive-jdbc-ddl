@@ -18,6 +18,9 @@ public class ApiTest {
 		HiveUtility.establishConnection();
 
 		HiveUtility.showDb();
+		/*HiveDbDesc db= new HiveDbDesc();
+		db.setDatabaseName("zal");
+		HiveUtility.dropDatabase(db);*/
 		
 		
 		/*
@@ -36,14 +39,14 @@ public class ApiTest {
 		
 		
 		//Create Table
-		List<TableFields> fields = new ArrayList<TableFields>();
+		List<Column> fields = new ArrayList<Column>();
 		
-		TableFields field1 = new TableFields();
+		Column field1 = new Column();
 		field1.setColumnName("Id");
 		DataType dType= new DataType();
 		dType.setDataType(HiveDataType.DECIMAL);
-		dType.setPrecision("10");
-		dType.setScale("2");
+		dType.setPrecision("40");
+		dType.setScale("40");
 		field1.setColumnType(dType);
 		field1.setComment("This is id field");
 		fields.add(field1);
@@ -53,10 +56,12 @@ public class ApiTest {
 		
 		HiveTableDesc table = new HiveTableDesc();
 		table.setDatabaseName("zaloni");
-		table.setTableName("table444");
+		table.setTableName("table555");
 		table.setColumn(fields);
 		HiveUtility.createTable(table);
 	
+		
+		
 		
 		
 		/*HiveTableDesc tDesc=new HiveTableDesc();

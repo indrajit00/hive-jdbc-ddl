@@ -42,14 +42,13 @@ public class HiveUtility {
 	 * Method for Showing Databases
 	 **/
 
-	public static ResultSet showDb() throws SQLException {
+	public static void showDb() throws SQLException {
 		System.out.println("!!!! Showing Databases");
 		state = connect.createStatement();
 		ResultSet show_Db = state.executeQuery("show databases");
 		while (show_Db.next()) {
 			System.out.println(show_Db.getString(1));
 		}
-		return show_Db;
 
 	}
 
@@ -59,37 +58,37 @@ public class HiveUtility {
 	 * @throws SQLException
 	 **/
 
-	public static void createDb(HiveDbDesc db) throws SQLException {
+	public static void createDatabase(HiveDbDesc databaseDesc) throws SQLException {
 
 		StringBuffer createHql = new StringBuffer("CREATE DATABASE ")
-				.append(db.getDatabaseName());
-		if (StringUtils.isNotBlank(db.getDbComments())) {
-				createHql.append(" COMMENT '")
-				.append(db.getDbComments())
-				.append("' ");
+							.append(databaseDesc.getDatabaseName());
+		if (StringUtils.isNotBlank(databaseDesc.getDbComments())) {
+					createHql.append(" COMMENT '")
+							.append(databaseDesc.getDbComments())
+							.append("' ");
 		}
-		if (StringUtils.isNotBlank(db.getDbLocation())) {
-				createHql.append(" LOCATION '")
-				.append(db.getDbLocation())
-				.append("' ");
+		if (StringUtils.isNotBlank(databaseDesc.getDbLocation())) {
+					createHql.append(" LOCATION '")
+							.append(databaseDesc.getDbLocation())
+							.append("' ");
 		}
 
-		if (MapUtils.isNotEmpty(db.getDbProperties())) {
-				createHql.append(" WITH DBPROPERTIES( ");
-			for (Entry m : db.getDbProperties().entrySet()) {
-				createHql.append(" '")
-				.append(m.getKey())
-				.append("' = '")
-				.append(m.getValue())
-				.append("',");
+		if (MapUtils.isNotEmpty(databaseDesc.getDbProperties())) {
+					createHql.append(" WITH DBPROPERTIES( ");
+			for (Entry m : databaseDesc.getDbProperties().entrySet()) {
+					createHql.append(" '")
+							.append(m.getKey())
+							.append("' = '")
+							.append(m.getValue())
+							.append("',");
 			}
-				createHql.deleteCharAt(createHql.length() - 1);
-				createHql.append(")");
+					createHql.deleteCharAt(createHql.length() - 1);
+					createHql.append(")");
 		}
 		
 		System.out.println("Final statement is - " + createHql.toString());
 		state.execute(createHql.toString());
-		System.out.println(db.getDatabaseName() + " is created sucessfully");
+		System.out.println(databaseDesc.getDatabaseName() + " is created sucessfully");
 	}
 
 	/***
@@ -97,48 +96,54 @@ public class HiveUtility {
 	 * 
 	 * @throws SQLException
 	 **/
-	public static void dropDatabase(HiveDbDesc db) throws SQLException
+	public static void dropDatabase(String databaseName) throws SQLException
 	{
 		StringBuffer createHql= new StringBuffer("DROP DATABASE ")
-							.append(db.getDatabaseName());
-		if(StringUtils.isNotBlank(db.getDropType()))
-		{
-					createHql.append(" ")
-							.append(db.getDropType());
-		}
+							.append(databaseName);
+		
 		state.execute(createHql.toString());
-		System.out.println(db.getDatabaseName()+" is dropped successfully");
+		System.out.println(databaseName+" is dropped successfully");
 	}
 	
+	public static void dropDatabase(String databaseName,String dropType) throws SQLException
+	{
+		StringBuffer createHql= new StringBuffer("DROP DATABASE ")
+							.append(databaseName)
+							.append(" ")
+							.append(dropType);
+		
+		state.execute(createHql.toString());
+		System.out.println(databaseName+" is dropped successfully");
+	}
 	
 	/***
 	 * Method for Using a Database
 	 * 
 	 * @throws SQLException
 	 **/
-	public static void useDb(HiveDbDesc db) throws SQLException {
+	public static void useDb(String databaseName) throws SQLException {
 		
-		state.execute("use " + db.getDatabaseName());
-		System.out.println(db.getDatabaseName()+ " is now being used");
+		state.execute("use " + databaseName);
+		System.out.println(databaseName+ " is now being used");
 
 	}
 
 	/***
-	 * Method to set database properties
+	 * Method to update database properties
 	 * 
 	 * @throws SQLException
 	 **/
-	public static void setDbProperty(HiveDbDesc dbPro)throws SQLException {
+	public static void updateDatabaseProperties(String databaseName,Map<String,String> databaseProperties)throws SQLException {
 		
 		StringBuilder createHql = new StringBuilder()
-			.append("ALTER DATABASE ")
-			.append(dbPro.getDatabaseName())
-			.append(" SET DBPROPERTIES(");
-		for (Entry m : dbPro.getDbProperties().entrySet()) {
-			createHql.append(m.getKey())
-			.append(" = ")
-			.append(m.getValue())
-			.append(",");
+							.append("ALTER DATABASE ")
+							.append(databaseName)
+							.append(" SET DBPROPERTIES(");
+		for (Entry m : databaseProperties.entrySet()) {
+						createHql.append(m.getKey())
+							.append(" = ")
+							.append(m.getValue())
+							.append(",");
 		}
 		createHql.deleteCharAt(createHql.length() - 1);
 		createHql.append(")");
@@ -148,42 +153,37 @@ public class HiveUtility {
 	}
 
 	/***
-	 * Method to set Database Owner
+	 * Method to update Database Owner
 	 * 
 	 * @throws SQLException
 	 **/
-	public static void setDatabaseOwner(HiveDbDesc db)throws SQLException {
+	public static void updateDatabaseOwner(String databaseName,String role)throws SQLException {
 		
 		StringBuilder createHql = new StringBuilder()
-			.append("ALTER DATABASE ")
-			.append(db.getDatabaseName())
-			.append(" SET OWNER( ")
-			.append(" ");
-			for (Entry m : db.getDbProperties().entrySet()) {
-			createHql.append(m.getKey())
-			.append(" = ")
-			.append(m.getValue());
-		}
-		createHql.append(")");
+							.append("ALTER DATABASE ")
+							.append(databaseName)
+							.append(" SET OWNER( ")
+							.append(" ")
+							.append(role);
+							
 		state.execute(createHql.toString());
 		System.out.println(createHql);
 		System.out.println("Database owner has been set successfuly");
 	}
 	
 	/***
-	 * Method to set Database Location
+	 * Method to update Database Location
 	 * 
 	 * @throws SQLException
 	 **/
-	public static void setDatabaseLocation(HiveDbDesc db)throws SQLException {
+	public static void updateDatabaseLocation(String databaseName,String location)throws SQLException {
 		
 		StringBuilder createHql = new StringBuilder()
-			.append("ALTER DATABASE ")
-			.append(db.getDatabaseName())
-			.append(" SET LOCATION( ")
-			.append(" ")
-			.append(db.getDbLocation())
-			.append(")");
+							.append("ALTER DATABASE ")
+							.append(databaseName)
+							.append(" SET LOCATION( ")
+							.append(" ")
+							.append(location);
 		state.execute(createHql.toString());
 		System.out.println(createHql);
 		System.out.println("Database location has been set successfuly");
@@ -198,7 +198,7 @@ public class HiveUtility {
 	 **/
 	public static void createTable(HiveTableDesc tableDesc) throws SQLException {
 		try {
-			List<TableFields> columnList = tableDesc.getColumn();
+			List<Column> columnList = tableDesc.getColumn();
 			StringBuffer createHql = new StringBuffer("CREATE TABLE ")
 								.append(tableDesc.getDatabaseName())
 								.append(".");
@@ -276,22 +276,27 @@ public class HiveUtility {
 	 * 
 	 * @throws SQLException
 	 **/
-	public static void dropTable(HiveTableDesc tb) throws SQLException
+	public static void dropTable(String tableName) throws SQLException
 	{
 		StringBuffer createHql= new StringBuffer("DROP TABLE ")
-							.append(tb.getTableName());
-		if(StringUtils.isNotBlank(tb.getDropType()))
-		{
-					createHql.append(" ")
-							.append(tb.getDropType());
-		}
+							.append(tableName);
 		state.execute(createHql.toString());
-		System.out.println(tb.getTableName()+" is dropped successfully");
+		System.out.println(tableName+" is dropped successfully");
+	}
+	
+	public static void dropTable(String tableName,String dropType) throws SQLException
+	{
+		StringBuffer createHql= new StringBuffer("DROP TABLE ")
+							.append(tableName)
+							.append(" ")
+							.append(dropType);
+		state.execute(createHql.toString());
+		System.out.println(tableName+" is dropped successfully");
 	}
 	
 	
 	/***
-	 * Method for alter(Rename a table)
+	 * Method for update(Rename a table)
 	 * 
 	 * @throws SQLException
 	 **/
@@ -309,40 +314,46 @@ public class HiveUtility {
 	}
 
 	/***
-	 * Method for alter table properties
+	 * Method for update table properties
 	 * 
 	 * @throws SQLException
 	 **/
-	public static void setTableProperty(String tbName,
-			Map<String, String> tableProperty) throws SQLException {
-		StringBuffer createHql = new StringBuffer("alter table " + tbName
-				+ " set tblproperties ('");
-		for (Map.Entry m : tableProperty.entrySet()) {
-			createHql.append(m.getKey() + " " + m.getValue() + ",");
+	public static void updateTableProperties(String tableName,Map<String, String> tableProperties) throws SQLException {
+		StringBuffer createHql = new StringBuffer("ALTER TABLE ")
+							.append(tableName)
+							.append(" SET TBLPROPERTIES('");
+		for (Map.Entry m : tableProperties.entrySet()) {
+					createHql.append(m.getKey() + " " + m.getValue() + ",");
 		}
-		createHql.deleteCharAt(createHql.length() - 1);
-		createHql.append(")");
+					createHql.deleteCharAt(createHql.length() - 1)
+							.append(")");
 		state.execute(createHql.toString());
 
 		System.out.println("Table properties has been updated successfuly");
 	}
 
 	/***
-	 * Method for serDe properties
+	 * Method for update serDe properties
 	 * 
 	 * @throws SQLException
 	 **/
-	public static void setSerdeProperty(String tbName,Map<String, String> serdeProperty) throws SQLException {
-		StringBuffer createHql = new StringBuffer("alter table ")
-					.append(tbName)
-					.append(" ")
-					.append(" set serdeproperties (");
-		for (Map.Entry m : serdeProperty.entrySet()) {
-			createHql.append("'" + m.getKey() + "'" + "=" + "'" + m.getValue()
-					+ "'");
+	public static void updateSerdeProperties(String tableName,Map<String, String> serdeProperties) throws SQLException {
+		StringBuffer createHql = new StringBuffer("ALTER TABLE ")
+							.append(tableName)
+							.append(" ")
+							.append(" SET SERDEPROPERTIES (");
+		for (Map.Entry m : serdeProperties.entrySet()) 
+		{
+					createHql.append("'")
+							.append(m.getKey())
+							.append("'")
+							.append("=")
+							.append("'")
+							.append(m.getValue())
+							.append("'");
 		}
-		createHql.deleteCharAt(createHql.length() - 1);
-		createHql.append(")");
+					createHql.deleteCharAt(createHql.length() - 1)
+							.append(")");
 		state.execute(createHql.toString());
 
 		System.out
@@ -350,17 +361,23 @@ public class HiveUtility {
 	}
 
 	/***
-	 * Method for set table storage properties
+	 * Method for update table storage properties
 	 * 
 	 * @throws SQLException
 	 **/
-	public static void setStorageProperty(String tbName,Map<String, String> storageProperty, String numBuckets)throws SQLException {
-		StringBuffer createHql = new StringBuffer("alter table " + tbName
-				+ " clustered by (");
-		for (Map.Entry m : storageProperty.entrySet()) {
-			createHql.append(m.getKey() + "," + m.getValue());
+	public static void updateStorageProperties(String tableName,Map<String, String> storageProperties, String numOfBuckets)throws SQLException {
+		StringBuffer createHql = new StringBuffer(" ALTER TABLE ")
+							.append(tableName)
+							.append(" CLUSTERED BY (");
+		for (Map.Entry m : storageProperties.entrySet()) 
+		{
+					createHql.append(m.getKey())
+							.append(",")
+							.append(m.getValue());
 		}
-		createHql.append("into " + numBuckets + " Buckets");
+					createHql.append("INTO ")
+							.append(numOfBuckets)
+							.append("BUCKETS");
 		state.execute(createHql.toString());
 
 		System.out
@@ -368,101 +385,104 @@ public class HiveUtility {
 	}
 
 	/***
-	 * Method for alter table partition(Add)
+	 * Method for update table partition(Add)
 	 * 
 	 * @throws SQLException
 	 **/
-	public static void addPartition(String tbName,
-			Map<String, String> partition, String numBuckets, String location)
-			throws SQLException {
-		StringBuffer createHql = new StringBuffer("alter table " + tbName
-				+ " add partition (");
-		for (Map.Entry m : partition.entrySet()) {
-			createHql.append(m.getKey() + "=" + "'" + m.getValue() + "'");
+	public static void addPartition(String tableName,Map<String, String> partition, String numOfBuckets, String location)throws SQLException {
+		StringBuffer createHql = new StringBuffer("ALTER TABLE ")
+							.append(tableName)
+							.append(" ")
+							.append("ADD PARTITION(");
+		for (Map.Entry m : partition.entrySet()) 
+		{
+					createHql.append(m.getKey())
+							.append("=")
+							.append("'")
+							.append(m.getValue())
+							.append("'");
 		}
-		createHql.append(") location" + "'" + location + "'");
-		state.execute(createHql.toString());
-
-		System.out
-				.println("Table Storage properties has been updated successfuly");
-	}
-
-	/***
-	 * Method for alter table partition(Rename)
-	 * 
-	 * @throws SQLException
-	 **/
-	public static void renamePartition(String tbName,
-			Map<String, String> oldNamePartition,
-			Map<String, String> newNamePartition) throws SQLException {
-		StringBuffer createHql = new StringBuffer("alter table " + tbName
-				+ " partition ");
-		for (Map.Entry m : oldNamePartition.entrySet()) {
-			createHql.append(m.getKey() + "=" + "'" + m.getValue() + "'");
-		}
-		createHql.append(" rename to partition ");
-		for (Map.Entry m : newNamePartition.entrySet()) {
-			createHql.append(m.getKey() + "=" + "'" + m.getValue() + "'");
-		}
-		state.execute(createHql.toString());
-
-		System.out
-				.println("Table Storage properties has been updated successfuly");
-	}
-
-	/***
-	 * Method for alter table partition(exchange partition)
-	 * 
-	 * @throws SQLException
-	 **/
-	public static void exchangePartition(String table1, String table2,
-			Map<String, String> partitionSpec) throws SQLException {
-		StringBuffer createHql = new StringBuffer("alter table " + table2
-				+ " exchange partition (");
-		for (Map.Entry m : partitionSpec.entrySet()) {
-			createHql.append(m.getKey() + "=" + "'" + m.getValue() + "'");
-		}
-		createHql.append(") with table " + table1);
+					createHql.append(") LOCATION")
+							.append("'")
+							.append(location)
+							.append("'");
 		state.execute(createHql.toString());
 
 		System.out.println("Table Storage properties has been updated successfuly");
+	}
+
+	/***
+	 * Method for update table partition(Rename)
+	 * 
+	 * @throws SQLException
+	 **/
+	public static void renamePartition(String tableName,String oldPartition,String newPartition) throws SQLException {
+		StringBuffer createHql = new StringBuffer("ALTER TABLE ")
+							.append(tableName)
+							.append(" ")
+							.append(" PARTITION ")
+							.append(oldPartition)
+							.append(" RENAME TO ")
+							.append(newPartition);
+		
+		state.execute(createHql.toString());
+
+		System.out.println("Partition renamed successfuly");
+	}
+
+	/***
+	 * Method for update table partition(exchange partition)
+	 * 
+	 * @throws SQLException
+	 **/
+	public static void exchangePartition(String tableName1, String tableName2,String partition) throws SQLException {
+		StringBuffer createHql = new StringBuffer("ALTER TABLE ")
+							.append(tableName2)
+							.append("EXCHANGE PARTITION( ")
+							.append(partition)
+							.append(" WITH TABLE ")
+							.append(tableName2);
+		state.execute(createHql.toString());
+
+		System.out.println("Partition exchanged successfuly");
 	}
 	
 	
 		
 
 	/***
-	 * Method for Alter Column
+	 * Method for update Column(change column)
 	 * 
 	 * @throws SQLException
 	 **/
-	public static void alterColumn(HiveTableDesc tb) throws SQLException {
-		List<TableFields> tableField=tb.getColumn();
+	public static void changeColumn(HiveTableDesc column) throws SQLException {
+		List<Column> listOfColumn=column.getColumn();
 		StringBuffer createHql= new StringBuffer(" ALTER TABLE ");
-		for(int i=0;i<=tableField.size();i++) {
-			createHql.append(tb.getTableName())
+		for(int i=0;i<=listOfColumn.size();i++) {
+			createHql.append(column.getTableName())
 					.append(" CHANGE COLUMN ")
-					.append(tableField.get(i).getColumnName())
+					.append(listOfColumn.get(i).getColumnName())
 					.append(" ")
-					.append(tableField.get(i).getColumnNewName());
-					if(StringUtils.isNotBlank(tableField.get(i).getColumnType().getPrecision())&&StringUtils.isNotBlank(tableField.get(i).getColumnType().getScale()))
+					.append(listOfColumn.get(i).getColumnNewName());
+					if(StringUtils.isNotBlank(listOfColumn.get(i).getColumnType().getPrecision())&&StringUtils.isNotBlank(listOfColumn.get(i).getColumnType().getScale()))
 					{
-						createHql.append(tableField.get(i).getColumnType())
-						.append("(")
-						.append(tableField.get(i).getColumnType().getPrecision())
-						.append(",")
-						.append(tableField.get(i).getColumnType().getScale())
-						.append(")");
+						createHql.append(listOfColumn.get(i).getColumnType())
+								.append("(")
+								.append(listOfColumn.get(i).getColumnType().getPrecision())
+								.append(",")
+								.append(listOfColumn.get(i).getColumnType().getScale())
+								.append(")");
 					}
 					else
 					{
-						createHql.append(tableField.get(i).getColumnType())
-						.append(" COMMENT ")
-						.append(" '")
-						.append(tableField.get(i).getComment())
-						.append("'");
+						createHql.append(listOfColumn.get(i).getColumnType())
+								.append(" COMMENT ")
+								.append(" '")
+								.append(listOfColumn.get(i).getComment())
+								.append("'");
 					}
-					createHql.append(")");
+						createHql.append(")")
+								.append(" RESTRICT ");
 					System.out.println(createHql);
 					state.execute(createHql.toString());
 		}
@@ -470,38 +490,39 @@ public class HiveUtility {
 	}
 	
 	/***
-	 * Method for Replace Column
+	 * Method for update Column(replace column)
 	 * 
 	 * @throws SQLException
 	 **/
-	public static void replaceColumn(HiveTableDesc tb) throws SQLException
+	public static void replaceColumn(HiveTableDesc column) throws SQLException
 	{
-		List<TableFields> tableField=tb.getColumn();
+		List<Column> listOfColumn=column.getColumn();
 		StringBuffer createHql= new StringBuffer(" ALTER TABLE ");
-		for(int i=0;i<=tableField.size();i++) {
-			createHql.append(tb.getTableName())
+		for(int i=0;i<=listOfColumn.size();i++) {
+			createHql.append(column.getTableName())
 					.append(" REPLACE COLUMNS (")
-					.append(tableField.get(i).getColumnName())
+					.append(listOfColumn.get(i).getColumnName())
 					.append(" ");
-					if(StringUtils.isNotBlank(tableField.get(i).getColumnType().getPrecision())&&StringUtils.isNotBlank(tableField.get(i).getColumnType().getScale()))
+					if(StringUtils.isNotBlank(listOfColumn.get(i).getColumnType().getPrecision())&&StringUtils.isNotBlank(listOfColumn.get(i).getColumnType().getScale()))
 					{
-						createHql.append(tableField.get(i).getColumnType())
+						createHql.append(listOfColumn.get(i).getColumnType())
 						.append("(")
-						.append(tableField.get(i).getColumnType().getPrecision())
+						.append(listOfColumn.get(i).getColumnType().getPrecision())
 						.append(",")
-						.append(tableField.get(i).getColumnType().getScale())
+						.append(listOfColumn.get(i).getColumnType().getScale())
 						.append(")");
 					}
 					else
 					{
-						createHql.append(tableField.get(i).getColumnType())
+						createHql.append(listOfColumn.get(i).getColumnType())
 						.append(" COMMENT ")
 						.append(" '")
-						.append(tableField.get(i).getComment())
+						.append(listOfColumn.get(i).getComment())
 						.append(",");
 					}
-					createHql.deleteCharAt(createHql.length() - 1);
-					createHql.append(")");
+					createHql.deleteCharAt(createHql.length() - 1)
+							.append(")")
+							.append(" RESTRICT ");
 					System.out.println(createHql);
 					state.execute(createHql.toString());
 		}

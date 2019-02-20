@@ -1,6 +1,6 @@
 package com.zaloni.hiveApi;
 
-public class TableFields {
+public class Column {
 	private String columnName;
 	private String columnNewName;
 	private DataType columnType;
@@ -41,7 +41,6 @@ public class TableFields {
 		this.columnNewName = columnNewName;
 	}
 
-	
 	
 
 }

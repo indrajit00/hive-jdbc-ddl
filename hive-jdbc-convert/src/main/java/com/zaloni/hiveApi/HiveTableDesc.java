@@ -10,7 +10,7 @@ public class HiveTableDesc {
 	private String newTableName;
 	private String location;
 	private String owner;
-	private List<TableFields> column;
+	private List<Column> column;
 	private String rowFormat;
 	private String storedAs;
 	private String fieldsTerminatedBy;
@@ -68,11 +68,11 @@ public class HiveTableDesc {
 		this.owner = owner;
 	}
 
-	public List<TableFields> getColumn() {
+	public List<Column> getColumn() {
 		return column;
 	}
 
-	public void setColumn(List<TableFields> column) {
+	public void setColumn(List<Column> column) {
 		this.column = column;
 	}
 	public String getCreateTime() {
