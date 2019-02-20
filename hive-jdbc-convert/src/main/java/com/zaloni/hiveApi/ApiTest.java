@@ -9,15 +9,15 @@ import java.util.Map;
 
 import com.zaloni.hiveApi.HiveDbDesc;
 import com.zaloni.hiveApi.HiveTableDesc;
-import com.zaloni.hiveApi.HiveUtility;
+
 
 
 public class ApiTest {
 
 	public static void main(String[] args) throws SQLException {
-		HiveUtility.establishConnection();
+		HiveCreate.establishConnection();
 
-		HiveUtility.showDb();
+
 		/*HiveDbDesc db= new HiveDbDesc();
 		db.setDatabaseName("zal");
 		HiveUtility.dropDatabase(db);*/
@@ -58,7 +58,7 @@ public class ApiTest {
 		table.setDatabaseName("zaloni");
 		table.setTableName("table555");
 		table.setColumn(fields);
-		HiveUtility.createTable(table);
+		HiveCreate.createTable(table);
 	
 		
 		
