@@ -1,7 +1,11 @@
 
 package com.zaloni.hiveApi;
 
+
+
+
 import java.sql.SQLException;
+import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -9,21 +13,18 @@ import java.util.Map;
 
 import com.zaloni.hiveApi.HiveDbDesc;
 import com.zaloni.hiveApi.HiveTableDesc;
+import com.zaloni.hiveApi.HiveCreate;
 
 
 
 public class ApiTest {
 
 	public static void main(String[] args) throws SQLException {
-		HiveCreate.establishConnection();
-
-
-		/*HiveDbDesc db= new HiveDbDesc();
-		db.setDatabaseName("zal");
-		HiveUtility.dropDatabase(db);*/
-		
+	
+		HiveCreate.showDb();
 		
 		/*
+		// Create Database
 		HiveDbDesc Db=new HiveDbDesc();
 		Db.setDatabaseName("New_Database");
 		Db.setDbComments("This_is_a_new_Database");
@@ -33,10 +34,43 @@ public class ApiTest {
 		dbPro.put("Propert2_Name", "Property2_Value");
 		Db.setDbProperties(dbPro);
 		
-		HiveUty.createDb(Db);
-	*/
+		HiveCreate.createDatabase(Db);
+	
+		HiveCreate.showDb();
 		
+		//Create Table
+				List<Column> fields = new ArrayList<Column>();
+				
+				Column field1 = new Column();
+				field1.setColumnName("Id");
+				DataType dType= new DataType();
+				dType.setDataType(HiveDataType.INT);
+				field1.setColumnType(dType);
+				field1.setComment("This is id field");
+				fields.add(field1);
+								
+				HiveTableDesc table = new HiveTableDesc();
+				table.setDatabaseName("default");
+				table.setTableName("table7");
+				table.setColumn(fields);
+		HiveCreate.createTable(table);   			
+
+		HiveUpdate.useDb("zaloni");
 		
+		HiveCreate.showTable();
+		
+		HiveUpdate.dropTable("default", "table7");
+		
+		//Update Database Properties
+		Map<String,String> dbPro1=new HashMap<String,String>();
+		dbPro1.put("'Date'","'21-02-2019'");
+		HiveUpdate.updateDatabaseProperties("New_Database",dbPro1);
+		
+		HiveUpdate.updateDatabaseOwner("zaloni", "ADMIN"); 
+		
+		HiveUpdate.updateDatabaseLocation("zaloni", " "); 
+		
+		HiveUpdate.renameTable("zaloni", "table3008", "table308");    
 		
 		//Create Table
 		List<Column> fields = new ArrayList<Column>();
@@ -44,49 +78,74 @@ public class ApiTest {
 		Column field1 = new Column();
 		field1.setColumnName("Id");
 		DataType dType= new DataType();
-		dType.setDataType(HiveDataType.DECIMAL);
-		dType.setPrecision("40");
-		dType.setScale("40");
+		dType.setDataType(HiveDataType.INT);
+		field1.setColumnType(dType);
+		field1.setComment("This is id field");
+		fields.add(field1);
+						
+		HiveTableDesc table = new HiveTableDesc();
+		table.setDatabaseName("default");
+		table.setTableName("table147");
+		table.setColumn(fields);
+		HiveCreate.createTable(table);   			
+		
+		Map<String,String> dbPro2=new HashMap<String,String>();
+		dbPro2.put("'Date' = ","'21-02-2019'");
+
+		HiveUpdate.updateTableProperties("table_new", dbPro2);		
+		
+
+		Map<String,String> dbPro3=new HashMap<String,String>();
+		dbPro3.put("Date","22-02-2019");
+		
+		HiveUpdate.updateSerdeProperties("table147", dbPro3);		
+	
+
+		Map<String,String> dbPro4=new HashMap<String,String>();
+		dbPro4.put("value1","2000");
+		
+		HiveUpdate.addPartition("table_new", dbPro4);		
+		
+		//Change Column name and type of an existing table
+		
+List<Column> fields = new ArrayList<Column>();
+		
+		Column field1 = new Column();
+		field1.setColumnName("Id");
+		field1.setColumnNewName("Tab_ID");
+		DataType dType= new DataType();
+		dType.setDataType(HiveDataType.INT);
 		field1.setColumnType(dType);
 		field1.setComment("This is id field");
 		fields.add(field1);
 		
+		HiveTableDesc col = new HiveTableDesc();
+		col.setDatabaseName("zaloni");
+		col.setTableName("table147");
+		col.setColumn(fields);
+//		HiveCreate.createTable(col);
+		HiveUpdate.changeColumn(col );  		*/
 		
 		
+		//Replace columns of a table
 		
-		HiveTableDesc table = new HiveTableDesc();
-		table.setDatabaseName("zaloni");
-		table.setTableName("table555");
-		table.setColumn(fields);
-		HiveCreate.createTable(table);
-	
+List<Column> fields = new ArrayList<Column>();
 		
+		Column field1 = new Column();
+		field1.setColumnName("Tab_Name");
+		DataType dType= new DataType();
+		dType.setDataType(HiveDataType.STRING);
+		field1.setColumnType(dType);
+		field1.setComment("This is id field");
+		fields.add(field1);
 		
+		HiveTableDesc col = new HiveTableDesc();
+		col.setDatabaseName("zaloni");
+		col.setTableName("table147");
+		col.setColumn(fields);
+//		HiveCreate.createTable(col);
+		HiveUpdate.replaceColumn(col ); 
 		
-		
-		/*HiveTableDesc tDesc=new HiveTableDesc();
-		
-		tDesc.getComments("This is comment");
-		tDesc.getDatabaseName("Zaloni");
-		tDesc.getTableName("newTable");
-		HiveUty.createTable(tDesc,fieldDetails);*/
-		//HiveUty.rename_tb("employee", "new_employee");
-	
-		//HiveUty.set_Tb_property("tab5","new_comment","this is new table comment");
-		//HiveUty.set_db_ property("zaloni", "comment", "this is  new db");
-		
-		/*
-		HiveTableDesc tableProperties=new HiveTableDesc();
-		tableProperties.setTableName("newtable");
-		HiveUty.tableDescription(tableProperties);*/
-		
-		/*HiveDbDesc hiveDb=new HiveDbDesc();
-		hiveDb.setDatabaseName("zaloni");
-		Map<String,String> dbPro=new HashMap<String,String>();
-		dbPro.put("Property1","property_Value1");
-		dbPro.put("property2","property_value2");
-		hiveDb.setDbProperties(dbPro);
-		HiveUtility.setDbProperty(hiveDb);*/
 	}
 
 }
