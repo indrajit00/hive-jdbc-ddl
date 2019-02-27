@@ -200,11 +200,28 @@ List<Column> fields = new ArrayList<Column>();
 		partff.put("CITY", "JAIPUR");		
 //		HiveUpdate.updatePartitionFileFormat("PART_TAB3", partff, "TEXTFILE");
 		
-		HiveUpdate.updatePartitionLocation("default","PART_TAB3", partff, "hdfs://hdpdev-n1.zalonilabs.com:8020/user/zaloni/t1");
+//		HiveUpdate.updatePartitionLocation("default","PART_TAB3", partff, "hdfs://hdpdev-n1.zalonilabs.com:8020/user/zaloni/t1");
 	
 //		HiveUpdate.updateDatabaseLocation("new_database", "/user/zaloni/t1"); 
 		
-//	/	StringBuffer createHql = new StringBuffer("desc formatted PART_TAB3");
-//		Hive
+		//Adding column
+List<Column> fields = new ArrayList<Column>();
+	
+	Column field1 = new Column();
+	field1.setColumnName("Tab_New");
+	DataType dType= new DataType();
+	dType.setDataType(HiveDataType.STRING);
+	field1.setColumnType(dType);
+	field1.setComment("This is new field");
+	fields.add(field1);
+	
+	HiveTableDesc col = new HiveTableDesc();
+	col.setDatabaseName("zaloni");
+	col.setTableName("table147");
+	col.setColumn(fields);
+//	HiveCreate.createTable(col);
+	HiveUpdate.addColumn(col);
+		
+
 	}
 }

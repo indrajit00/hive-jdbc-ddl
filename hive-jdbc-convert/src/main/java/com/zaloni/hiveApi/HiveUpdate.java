@@ -106,27 +106,7 @@ public class HiveUpdate {
 		System.out.println("Database owner has been set successfully");
 	}
 
-	/***
-	 * Method to update Database Location
-	 * 
-	 * @throws SQLException
-	 **/
-	/**
-	 * @param databaseName
-	 *            name of the database
-	 * @param location
-	 *            location to which the database will be stored
-	 * @throws SQLException
-	 */
-	public static void updateDatabaseLocation(String databaseName, String location) throws SQLException {
-
-		StringBuilder createHql = new StringBuilder().append("ALTER DATABASE ").append(databaseName)
-				.append(" SET LOCATION").append(" '").append(location).append("'");
-		HiveQueryExecutor.execute(createHql.toString());
-		System.out.println(createHql);
-		System.out.println("Database location has been set successfully");
-	}
-
+	
 	/***
 	 * Method for Dropping a Table
 	 * 
@@ -365,7 +345,7 @@ public class HiveUpdate {
 	public static void addColumn(HiveTableDesc column) throws SQLException {
 		List<Column> listOfColumn = column.getColumn();
 		StringBuffer createHql = new StringBuffer(" ALTER TABLE ").append(column.getDatabaseName()).append(".");
-		createHql.append(column.getTableName()).append(" ADD COLUMNS (");
+		createHql.append(column.getTableName()).append(" ADD COLUMNS(");
 		for (int i = 0; i <= listOfColumn.size(); i++) {
 			
 					createHql.append(listOfColumn.get(i).getColumnName()).append(" ");
@@ -378,7 +358,7 @@ public class HiveUpdate {
 				createHql.append(listOfColumn.get(i).getColumnType().getDataType()).append(" COMMENT ").append(" '")
 						.append(listOfColumn.get(i).getComment()).append("'").append(",");
 			}
-			createHql.deleteCharAt(createHql.length() - 1).append(")").append(" RESTRICT ");
+			createHql.deleteCharAt(createHql.length() - 1).append(")");
 			HiveQueryExecutor.execute(createHql.toString());
 			System.out.println("Column is added to the table!!");
 		}
