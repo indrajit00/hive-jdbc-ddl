@@ -81,7 +81,7 @@ public class HiveUpdate {
 		createHql.append(")");
 		HiveQueryExecutor.execute(createHql.toString());
 		System.out.println(createHql);
-		System.out.println("Database properties has been updated successfuly");
+		System.out.println("Database properties has been updated successfully");
 	} 
 
 	/***
@@ -103,7 +103,7 @@ public class HiveUpdate {
 
 		HiveQueryExecutor.execute(createHql.toString());
 		System.out.println(createHql);
-		System.out.println("Database owner has been set successfuly");
+		System.out.println("Database owner has been set successfully");
 	}
 
 	/***
@@ -121,10 +121,10 @@ public class HiveUpdate {
 	public static void updateDatabaseLocation(String databaseName, String location) throws SQLException {
 
 		StringBuilder createHql = new StringBuilder().append("ALTER DATABASE ").append(databaseName)
-				.append(" SET LOCATION ").append(" ").append(location);
+				.append(" SET LOCATION").append(" '").append(location).append("'");
 		HiveQueryExecutor.execute(createHql.toString());
 		System.out.println(createHql);
-		System.out.println("Database location has been set successfuly");
+		System.out.println("Database location has been set successfully");
 	}
 
 	/***
@@ -193,7 +193,7 @@ public class HiveUpdate {
 		createHql.deleteCharAt(createHql.length() - 1).append(")");
 		HiveQueryExecutor.execute(createHql.toString());
 
-		System.out.println("Table properties has been updated successfuly");
+		System.out.println("Table properties has been updated successfully");
 	}
 
 	/***
@@ -218,35 +218,10 @@ public class HiveUpdate {
 		createHql.append(")");
 		HiveQueryExecutor.execute(createHql.toString());
 
-		System.out.println("Table Serde properties has been updated successfuly");
+		System.out.println("Table Serde properties has been updated successfully");
 	}
 
-	/***
-	 * Method for update table storage properties
-	 * 
-	 * @throws SQLException
-	 **/
-	/**
-	 * @param tableName
-	 *            name of the table
-	 * @param storageProperties
-	 *            mapped values of storage properties of String type
-	 * @param numOfBuckets
-	 *            number of buckets
-	 * @throws SQLException
-	 */
-	public static void updateStorageProperties(String tableName, Map<String, String> storageProperties,
-			String numOfBuckets) throws SQLException {
-		StringBuffer createHql = new StringBuffer(" ALTER TABLE ").append(tableName).append(" CLUSTERED BY (");
-		for (Map.Entry m : storageProperties.entrySet()) {
-			createHql.append(m.getKey()).append(",").append(m.getValue());
-		}
-		createHql.append("INTO ").append(numOfBuckets).append("BUCKETS");
-		HiveQueryExecutor.execute(createHql.toString());
-
-		System.out.println("Table Storage properties has been updated successfuly");
-	}
-
+	
 	/***
 	 * Method for update table partition(Add)
 	 * 
@@ -254,7 +229,7 @@ public class HiveUpdate {
 	 **/
 	/**
 	 * @param tableName
-	 *            name of the table
+	 *            name of the table 
 	 * @param partition
 	 *            name of the partition
 	 * @param numOfBuckets
@@ -266,7 +241,7 @@ public class HiveUpdate {
 	public static void addPartition(String tableName, Map<String, String> partition) throws SQLException {
 //			String location
 		StringBuffer createHql = new StringBuffer("ALTER TABLE ").append(tableName).append(" ")
-				.append("ADD PARTITION(");
+				.append("ADD IF NOT EXISTS PARTITION(");
 		for (Map.Entry m : partition.entrySet()) {
 			createHql.append(m.getKey()).append("=").append("'").append(m.getValue()).append("'");
 		}
@@ -275,7 +250,7 @@ public class HiveUpdate {
 		
 		HiveQueryExecutor.execute(createHql.toString());
 
-		System.out.println("Table Storage properties has been updated successfuly");
+		System.out.println("Partition has being added to the table successfully!!");
 	}
 
 	/***
@@ -290,36 +265,23 @@ public class HiveUpdate {
 	 * @param newPartition
 	 * @throws SQLException
 	 */
-	public static void renamePartition(String tableName, String oldPartition, String newPartition) throws SQLException {
-		StringBuffer createHql = new StringBuffer("ALTER TABLE ").append(tableName).append(" ").append(" PARTITION ")
-				.append(oldPartition).append(" RENAME TO ").append(newPartition);
+	public static void renamePartition(String tableName, Map<String, String> oldPartition, Map<String, String> newPartition) throws SQLException {
+		StringBuffer createHql = new StringBuffer("ALTER TABLE ").append(tableName).append(" ").append(" PARTITION( ");
+				for (Map.Entry m : oldPartition.entrySet()) {
+					createHql.append(m.getKey()).append("=").append("'").append(m.getValue()).append("'");
+				}
+				createHql.append(")")
+				.append(" RENAME TO PARTITION(");
+				for (Map.Entry m : newPartition.entrySet()) {
+					createHql.append(m.getKey()).append("=").append("'").append(m.getValue()).append("'");
+				}
+				createHql.append(")");
 
 		HiveQueryExecutor.execute(createHql.toString());
 
-		System.out.println("Partition renamed successfuly");
+		System.out.println("Partition renamed successfully");
 	}
 
-	/***
-	 * Method for update table partition(exchange partition)
-	 * 
-	 * @throws SQLException
-	 **/
-	/**
-	 * @param tableName1
-	 *            name of the table 1
-	 * @param tableName2
-	 *            name of the table 2
-	 * @param partition
-	 *            name of the partition
-	 * @throws SQLException
-	 */
-	public static void exchangePartition(String tableName1, String tableName2, String partition) throws SQLException {
-		StringBuffer createHql = new StringBuffer("ALTER TABLE ").append(tableName2).append("EXCHANGE PARTITION( ")
-				.append(partition).append(" WITH TABLE ").append(tableName2);
-		HiveQueryExecutor.execute(createHql.toString());
-
-		System.out.println("Partition exchanged successfuly");
-	}
 
 	/***
 	 * Method for update Column(change column)
@@ -389,6 +351,40 @@ public class HiveUpdate {
 	}
 
 	/***
+	 * Method for update Column(add column)
+	 * 
+	 * this adds new column in the existing columns of the table
+	 * @throws SQLException
+	 **/
+	/**
+	 * @param column
+	 *            object of HiveTabletype containing column name, column data type
+	 * @throws SQLException
+	 */
+
+	public static void addColumn(HiveTableDesc column) throws SQLException {
+		List<Column> listOfColumn = column.getColumn();
+		StringBuffer createHql = new StringBuffer(" ALTER TABLE ").append(column.getDatabaseName()).append(".");
+		createHql.append(column.getTableName()).append(" ADD COLUMNS (");
+		for (int i = 0; i <= listOfColumn.size(); i++) {
+			
+					createHql.append(listOfColumn.get(i).getColumnName()).append(" ");
+			if (StringUtils.isNotBlank(listOfColumn.get(i).getColumnType().getPrecision())
+					&& StringUtils.isNotBlank(listOfColumn.get(i).getColumnType().getScale())) {
+				createHql.append(listOfColumn.get(i).getColumnType().getDataType()).append("(")
+						.append(listOfColumn.get(i).getColumnType().getPrecision()).append(",")
+						.append(listOfColumn.get(i).getColumnType().getScale()).append(")");
+			} else {
+				createHql.append(listOfColumn.get(i).getColumnType().getDataType()).append(" COMMENT ").append(" '")
+						.append(listOfColumn.get(i).getComment()).append("'").append(",");
+			}
+			createHql.deleteCharAt(createHql.length() - 1).append(")").append(" RESTRICT ");
+			HiveQueryExecutor.execute(createHql.toString());
+			System.out.println("Column is added to the table!!");
+		}
+	}
+
+	/***
 	 * Method for Drop Partition
 	 * 
 	 * @throws SQLException
@@ -420,13 +416,15 @@ public class HiveUpdate {
 	 * @throws SQLException
 	 */
 
-	public static void updatePartitionFileFormat(String TableName, Map<String, String> partition, String FileFormat) {
+	public static void updatePartitionFileFormat(String TableName, Map<String, String> partition, String FileFormat) throws SQLException {
 
-		StringBuffer createHql = new StringBuffer("ALTER TABLE ").append(TableName).append(" PARTTION(");
+		StringBuffer createHql = new StringBuffer("ALTER TABLE ").append(TableName).append(" PARTITION(");
 		for (Map.Entry m : partition.entrySet()) {
 			createHql.append(m.getKey() + "=" + "'" + m.getValue() + "'");
 		}
-		createHql.append(" SET FILEFORMAT ").append(FileFormat);
+		createHql.append(") SET FILEFORMAT ").append(FileFormat);
+		HiveQueryExecutor.execute(createHql.toString());
+		System.out.println(TableName + " Partition is updated with the File Format successfully");
 	}
 
 	/***
@@ -442,14 +440,19 @@ public class HiveUpdate {
 	 *            name of the partition
 	 * @param Location
 	 *            location of the table
+	 * @throws SQLException 
 	 */
-	public static void updatePartitionLocation(String TableName, Map<String, String> partition, String Location) {
+	public static void updatePartitionLocation(String dbname, String TableName, Map<String, String> partition, String Location) throws SQLException {
 
-		StringBuffer createHql = new StringBuffer("ALTER TABLE ").append(TableName).append(" PARTTION(");
+		StringBuffer createHql = new StringBuffer("ALTER TABLE ");
+		createHql.append(dbname).append(".").append(TableName).append(" PARTITION(");
 		for (Map.Entry m : partition.entrySet()) {
 			createHql.append(m.getKey() + "=" + "'" + m.getValue() + "'");
 		}
-		createHql.append(" SET LOCATOIN( ").append(Location).append(" )");
+		createHql.append(") SET LOCATION '").append(Location).append("'");
+		HiveQueryExecutor.execute(createHql.toString());
+		System.out.println(TableName + " Partition is updated with the location successfully");
+
 
 	}
 

@@ -21,7 +21,7 @@ public class ApiTest {
 
 	public static void main(String[] args) throws SQLException {
 	
-		HiveCreate.showDb();
+    	HiveCreate.showDb();
 		
 		/*
 		// Create Database
@@ -124,7 +124,7 @@ List<Column> fields = new ArrayList<Column>();
 		col.setTableName("table147");
 		col.setColumn(fields);
 //		HiveCreate.createTable(col);
-		HiveUpdate.changeColumn(col );  		*/
+		HiveUpdate.changeColumn(col );  		
 		
 		
 		//Replace columns of a table
@@ -144,8 +144,67 @@ List<Column> fields = new ArrayList<Column>();
 		col.setTableName("table147");
 		col.setColumn(fields);
 //		HiveCreate.createTable(col);
-		HiveUpdate.replaceColumn(col ); 
+		HiveUpdate.replaceColumn(col ); 	
+	
+			//Adding column
+List<Column> fields = new ArrayList<Column>();
 		
-	}
+		Column field1 = new Column();
+		field1.setColumnName("Tab_City");
+		DataType dType= new DataType();
+		dType.setDataType(HiveDataType.STRING);
+		field1.setColumnType(dType);
+		field1.setComment("This is city field");
+		fields.add(field1);
+		
+		HiveTableDesc col = new HiveTableDesc();
+		col.setDatabaseName("zaloni");
+		col.setTableName("table147");
+		col.setColumn(fields);
+//		HiveCreate.createTable(col);
+		HiveUpdate.addColumn(col);
+	
+		
+		Map<String,String> dbPro4=new HashMap<String,String>();
+		dbPro4.put("CONATCT","7896130");
+		
+		HiveUpdate.addPartition("PART_TAB", dbPro4);	
+	
+/*		StringBuffer createHql = new StringBuffer("CREATE TABLE PART_TAB(ID INT, NAME STRING, ADD STRING) PARTITIONED BY (CONATCT STRING) ");
+		HiveQueryExecutor.execute(createHql.toString());
+		System.out.println("PARTITON TAB CREATED");		*/
 
+/*		Map<String, String> oldpart = new HashMap<String,String>();
+		oldpart.put("CONATCT", "7896130");
+		
+		Map<String, String> newpart = new HashMap<String, String>();
+		newpart.put("CONATCT", "789456123");
+		
+		HiveUpdate.renamePartition("PART_TAB", oldpart, newpart);	
+		
+		StringBuffer createHql = new StringBuffer("CREATE TABLE PART_TAB3
+		(ID INT, NAME STRING, ADD STRING) PARTITIONED BY (CITY STRING) ");
+		HiveQueryExecutor.execute(createHql.toString());
+		System.out.println("PARTITON TAB CREATED");		
+	
+		Map<String, String> drpart = new HashMap<String, String>();
+		drpart.put("CONATCT", "78894512");		
+		HiveUpdate.dropPartition("PART_TAB", drpart);		*/
+		
+		Map<String,String> dbPro4=new HashMap<String,String>();
+		dbPro4.put("CITY","JAIPUR");
+		
+//		HiveUpdate.addPartition("PART_TAB3", dbPro4);
+		
+		Map<String, String> partff = new HashMap<String, String>();
+		partff.put("CITY", "JAIPUR");		
+//		HiveUpdate.updatePartitionFileFormat("PART_TAB3", partff, "TEXTFILE");
+		
+		HiveUpdate.updatePartitionLocation("default","PART_TAB3", partff, "hdfs://hdpdev-n1.zalonilabs.com:8020/user/zaloni/t1");
+	
+//		HiveUpdate.updateDatabaseLocation("new_database", "/user/zaloni/t1"); 
+		
+//	/	StringBuffer createHql = new StringBuffer("desc formatted PART_TAB3");
+//		Hive
+	}
 }
