@@ -45,7 +45,7 @@ public class HiveCreate {
 	 *            and database properties
 	 * @throws SQLException
 	 */
-	public static void createDatabase(HiveDbDesc databaseDesc) throws SQLException {
+	public static boolean createDatabase(HiveDbDesc databaseDesc) throws SQLException {
 
 		StringBuffer createHql = new StringBuffer("CREATE DATABASE ").append(databaseDesc.getDatabaseName());
 		if (StringUtils.isNotBlank(databaseDesc.getDbComments())) {
@@ -67,6 +67,7 @@ public class HiveCreate {
 		System.out.println("Final statement is - " + createHql.toString());
 		HiveConnectionProvider.getStatement().execute(createHql.toString());
 		System.out.println(databaseDesc.getDatabaseName() + " is created sucessfully");
+		return true;
 	}
 
 	/***
@@ -80,7 +81,7 @@ public class HiveCreate {
 	 *            type,column comment
 	 * @throws SQLException
 	 */
-	public static void createTable(HiveTableDesc tableDesc) throws SQLException {
+	public static boolean createTable(HiveTableDesc tableDesc) throws SQLException {
 
 		try {
 			StringBuffer createHql = new StringBuffer("CREATE TABLE ").append(tableDesc.getDatabaseName()).append(".");
@@ -129,9 +130,23 @@ public class HiveCreate {
 			System.out.println("Running exception");
 			e.printStackTrace();
 		}
+		return true;
 
 	}
 
+	/**
+	 * Method for closing connection
+	 * 
+	 * 
+	 * @throws SQLException
+	 */
+	public static boolean closeConnection() throws SQLException
+	{
+		HiveConnectionProvider.closeConnection();
+		System.out.println("Connection closed successfully");
+		return true;
+	}
+	
 	/**
 	 * Method that shows tables in the default database
 	 * 

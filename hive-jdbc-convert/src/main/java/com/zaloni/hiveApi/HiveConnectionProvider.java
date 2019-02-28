@@ -35,5 +35,9 @@ public class HiveConnectionProvider {
 		return state;
 
 	}
+	public static  void closeConnection() throws SQLException
+	{
+		connect.close();
+	}
 
 }
