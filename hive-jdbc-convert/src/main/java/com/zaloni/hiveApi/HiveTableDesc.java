@@ -1,6 +1,7 @@
 package com.zaloni.hiveApi;
 
 import java.util.List;
+import java.util.Map;
 
 
 public class HiveTableDesc {
@@ -11,9 +12,13 @@ public class HiveTableDesc {
 	private String location;
 	private String owner;
 	private List<Column> column;
-	private String rowFormat;
+	private String rowFormatDelimited;
 	private String storedAs;
-	private String fieldsTerminatedBy;
+	private String rowFormatSerdeName;
+	private Map<String,String> serdeProperties;
+	private List<Column> partitionColumn;
+	private String tableType;
+	private Boolean ifPartition;
 	
 	
 	//Detailed Table Information fields
@@ -21,7 +26,6 @@ public class HiveTableDesc {
 	private String lastAccessTime;
 	private String protectedMOde;
 	private String retention;
-	private boolean externalTable;
 	private String tableParameters;
 	private String dropType;
 	
@@ -107,14 +111,6 @@ public class HiveTableDesc {
 		this.retention = retention;
 	}
 
-	public boolean getExternalTable() {
-		return externalTable;
-	}
-
-	public void setTableType(boolean externalTable) {
-		this.externalTable = externalTable;
-	}
-
 	public String getTableParameters() {
 		return tableParameters;
 	}
@@ -187,12 +183,12 @@ public class HiveTableDesc {
 		this.storageDescParams = storageDescParams;
 	}
 
-	public String getRowFormat() {
-		return rowFormat;
+	public String getRowFormatDelimited() {
+		return rowFormatDelimited;
 	}
 
-	public void setRowFormat(String rowFormat) {
-		this.rowFormat = rowFormat;
+	public void setRowFormatDelimited(String rowFormatDelimited) {
+		this.rowFormatDelimited = rowFormatDelimited;
 	}
 
 	public String getStoredAs() {
@@ -211,12 +207,13 @@ public class HiveTableDesc {
 		this.newTableName = newTableName;
 	}
 
-	public String getFieldsTerminatedBy() {
-		return fieldsTerminatedBy;
+	public String getRowFormatSerdeName() {
+		return rowFormatSerdeName;
 	}
 
-	public void setFieldsTerminatedBy(String fieldsTerminatedBy) {
-		this.fieldsTerminatedBy = fieldsTerminatedBy;
+	public void setRowFormatSerdeName(String rowFormatSerdeName) {
+		this.rowFormatSerdeName = rowFormatSerdeName;
+		
 	}
 
 	public String getDropType() {
@@ -227,8 +224,36 @@ public class HiveTableDesc {
 		this.dropType = dropType;
 	}
 
-	public void setExternalTable(boolean externalTable) {
-		this.externalTable = externalTable;
+	public List<Column> getPartitionColumn() {
+		return partitionColumn;
+	}
+
+	public void setPartitionColumn(List<Column> partitionColumn) {
+		this.partitionColumn = partitionColumn;
+	}
+
+	public String getTableType() {
+		return tableType;
+	}
+
+	public void setTableType(String tableType) {
+		this.tableType = tableType;
+	}
+
+	public Boolean getIfPartition() {
+		return ifPartition;
+	}
+
+	public void setIfPartition(Boolean ifPartition) {
+		this.ifPartition = ifPartition;
+	}
+
+	public Map<String, String> getSerdeProperties() {
+		return serdeProperties;
+	}
+
+	public void setSerdeProperties(Map<String, String> serdeProperties) {
+		this.serdeProperties = serdeProperties;
 	}
 
 
