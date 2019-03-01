@@ -11,6 +11,9 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.apache.hadoop.hive.metastore.api.FieldSchema;
+import org.apache.hadoop.hive.metastore.api.Table;
+
 import com.zaloni.hiveApi.HiveDbDesc;
 import com.zaloni.hiveApi.HiveTableDesc;
 import com.zaloni.hiveApi.HiveCreate;
@@ -221,7 +224,31 @@ List<Column> fields = new ArrayList<Column>();
 	col.setColumn(fields);
 //	HiveCreate.createTable(col);
 	HiveUpdate.addColumn(col);
+	
+	
+	//////////////////////////////////////////////////////////////////////////////////////
+	Table existingTable = HiveMetadataExtractor.getTable("himangshu", "table");
+	
+	Table updatedTableRequest = existingTable.deepCopy();
+	FieldSchema newField = new FieldSchema();
+	newField.setName("age");
+	newField.setType("int");
+	
+	FieldSchema newField2 = new FieldSchema();
+	newField2.setName("height");
+	newField2.setType("decimal(5,2)");
+	
+	updatedTableRequest.getSd().getCols().add(newField);
+	updatedTableRequest.getSd().getCols().add(newField2);
+	System.out.println("New table description to be updated - " + updatedTableRequest);
+	
+	
+	/////////////////////////////////////////////////////
+	// existingTable Vs updatedTableRequest
+	
+	if(existingTable.getCreateTime() != updatedTableRequest.getCreateTime()) {
 		
 
+	}
 	}
 }
