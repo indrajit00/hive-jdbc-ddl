@@ -18,7 +18,8 @@ public class HiveTableDesc {
 	private Map<String,String> serdeProperties;
 	private List<Column> partitionColumn;
 	private String tableType;
-	private Boolean ifPartition;
+	private boolean ifPartition;
+	private boolean temporary;
 	
 	
 	//Detailed Table Information fields
@@ -254,6 +255,14 @@ public class HiveTableDesc {
 
 	public void setSerdeProperties(Map<String, String> serdeProperties) {
 		this.serdeProperties = serdeProperties;
+	}
+
+	public boolean isTemporary() {
+		return temporary;
+	}
+
+	public void setTemporary(boolean temporary) {
+		this.temporary = temporary;
 	}
 
 

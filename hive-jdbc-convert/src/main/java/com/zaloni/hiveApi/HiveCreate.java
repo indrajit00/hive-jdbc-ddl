@@ -84,13 +84,19 @@ public class HiveCreate {
 	public static boolean createTable(HiveTableDesc tableDesc) throws SQLException {
 
 		try {
-			StringBuffer createHql = new StringBuffer("CREATE TABLE ").append(tableDesc.getDatabaseName()).append(".");
-			if (tableDesc.getExternalTable() == true) {
-				createHql.append(" EXTERNAL ");
-			}
-			createHql.append(tableDesc.getTableName()).append("( ");
-
 			List<Column> columnList = tableDesc.getColumn();
+			StringBuffer createHql = new StringBuffer("CREATE ");
+			
+			if(tableDesc.isTemporary()==true)
+			{
+				createHql.append(" TEMPORARY ");
+			}
+			if (StringUtils.isNotBlank(tableDesc.getTableType())) {
+				createHql.append(tableDesc.getTableType());
+			}
+			createHql.append(" TABLE ")
+					.append(" ")
+					.append(tableDesc.getTableName()).append("( ");
 
 			for (int i = 0; i < columnList.size(); i++) {
 				createHql.append(columnList.get(i).getColumnName()).append(" ");
@@ -108,13 +114,7 @@ public class HiveCreate {
 			}
 			createHql.deleteCharAt(createHql.length() - 1);
 			createHql.append(")");
-			if (StringUtils.isNotBlank(tableDesc.getRowFormat())) {
-				createHql.append(" ROW FORMAT ").append(tableDesc.getRowFormat()).append(" ");
-			}
-			if (StringUtils.isNotBlank(tableDesc.getFieldsTerminatedBy())) {
-				createHql.append(" FIELDS TERMINATED BY ").append("'").append(tableDesc.getFieldsTerminatedBy())
-						.append("' ");
-			}
+			
 			if (StringUtils.isNotBlank(tableDesc.getStoredAs())) {
 				createHql.append(" ").append(tableDesc.getStoredAs()).append(" ");
 			}
