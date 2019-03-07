@@ -153,9 +153,9 @@ public class HiveCreate {
 	 * 
 	 * @throws SQLException
 	 */
-	public static void showTable() throws SQLException {
+	public static void showTable(String databaseName) throws SQLException {
 		System.out.println("!!!! Showing Tables");
-		ResultSet show_Tab = HiveQueryExecutor.executeQuery("show tables");
+		ResultSet show_Tab = HiveQueryExecutor.executeQuery("show tables in "+databaseName);
 		while (show_Tab.next()) {
 			System.out.println(show_Tab.getString(1));
 		}

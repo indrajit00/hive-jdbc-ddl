@@ -1,8 +1,4 @@
-
 package com.zaloni.hiveApi;
-
-
-
 
 import java.sql.SQLException;
 import java.sql.Statement;
@@ -24,7 +20,7 @@ public class ApiTest {
 
 	public static void main(String[] args) throws SQLException {
 	
-    	HiveCreate.showDb();
+    	//HiveCreate.showTable("zaloni");
 		
 		/*
 		// Create Database
@@ -192,20 +188,20 @@ List<Column> fields = new ArrayList<Column>();
 	
 		Map<String, String> drpart = new HashMap<String, String>();
 		drpart.put("CONATCT", "78894512");		
-		HiveUpdate.dropPartition("PART_TAB", drpart);		*/
+		HiveUpdate.dropPartition("PART_TAB", drpart);		
 		
 		Map<String,String> dbPro4=new HashMap<String,String>();
 		dbPro4.put("CITY","JAIPUR");
 		
-//		HiveUpdate.addPartition("PART_TAB3", dbPro4);
+		HiveUpdate.addPartition("PART_TAB3", dbPro4);
 		
 		Map<String, String> partff = new HashMap<String, String>();
 		partff.put("CITY", "JAIPUR");		
-//		HiveUpdate.updatePartitionFileFormat("PART_TAB3", partff, "TEXTFILE");
+		HiveUpdate.updatePartitionFileFormat("PART_TAB3", partff, "TEXTFILE");
 		
-//		HiveUpdate.updatePartitionLocation("default","PART_TAB3", partff, "hdfs://hdpdev-n1.zalonilabs.com:8020/user/zaloni/t1");
+		HiveUpdate.updatePartitionLocation("default","PART_TAB3", partff, "hdfs://hdpdev-n1.zalonilabs.com:8020/user/zaloni/t1");
 	
-//		HiveUpdate.updateDatabaseLocation("new_database", "/user/zaloni/t1"); 
+		HiveUpdate.updateDatabaseLocation("new_database", "/user/zaloni/t1"); 
 		
 		//Adding column
 List<Column> fields = new ArrayList<Column>();
@@ -222,33 +218,50 @@ List<Column> fields = new ArrayList<Column>();
 	col.setDatabaseName("zaloni");
 	col.setTableName("table147");
 	col.setColumn(fields);
-//	HiveCreate.createTable(col);
+HiveCreate.createTable(col);
 	HiveUpdate.addColumn(col);
-	
-	
-	//////////////////////////////////////////////////////////////////////////////////////
-	Table existingTable = HiveMetadataExtractor.getTable("himangshu", "table");
+	*/
+    /////////////////////////////////////////////////////////////////////////////////////
+    	
+	/////////////////////////////////////////////////////////////////////////////
+	Table existingTable = HiveMetadataExtractor.getTable("zaloni", "table12");
+	//System.out.println(existingTable);
 	
 	Table updatedTableRequest = existingTable.deepCopy();
+	//System.out.println(updatedTableRequest.getSd().getCols());
+	//System.out.println("#############################");
 	FieldSchema newField = new FieldSchema();
-	newField.setName("age");
+	newField.setName("weight");
 	newField.setType("int");
 	
 	FieldSchema newField2 = new FieldSchema();
 	newField2.setName("height");
 	newField2.setType("decimal(5,2)");
+	FieldSchema partition=new FieldSchema();
+	partition.setName("Member_name");
+	partition.setType("String");
 	
+
 	updatedTableRequest.getSd().getCols().add(newField);
 	updatedTableRequest.getSd().getCols().add(newField2);
-	System.out.println("New table description to be updated - " + updatedTableRequest);
+	//updatedTableRequest.getSd().getCols().remove(0);
 	
+	System.out.println("################################################");
+	System.out.println();
+	updatedTableRequest.setTableType("External");
+	updatedTableRequest.setTableName("newTableName");
+	Map<String,String> tablePro=new HashMap<String,String>();
+	tablePro.put("key1", "value1");
+	tablePro.put("totalSize", "22");
+	tablePro.put("numRows", "1");
+	tablePro.put("rawDataSize","10");
 	
-	/////////////////////////////////////////////////////
-	// existingTable Vs updatedTableRequest
-	
-	if(existingTable.getCreateTime() != updatedTableRequest.getCreateTime()) {
-		
+	updatedTableRequest.setParameters(tablePro);
+	TableDifferentiator.compareTable(existingTable, updatedTableRequest);
+	//System.out.println("New table description to be updated - " + updatedTableRequest);
 
-	}
+	
+	//////////////////////////////////////////////////////////////////////////////////////
+	// existingTable Vs updatedTableRequest
 	}
 }
