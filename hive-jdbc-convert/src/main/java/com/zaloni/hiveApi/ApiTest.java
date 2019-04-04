@@ -1,27 +1,46 @@
 package com.zaloni.hiveApi;
 
 import java.sql.SQLException;
+
+import java.io.FileWriter;
+import java.io.IOException;
+
+import org.json.simple.JSONArray;
+import org.json.simple.JSONObject;
+import org.json.simple.parser.*;
+
 import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
 import org.apache.hadoop.hive.metastore.api.FieldSchema;
 import org.apache.hadoop.hive.metastore.api.Table;
+import org.codehaus.jackson.JsonNode;
+import org.codehaus.jackson.JsonParseException;
+import org.codehaus.jackson.JsonParser;
+import org.codehaus.jackson.map.JsonMappingException;
+import org.codehaus.jackson.map.ObjectMapper;
 
 import com.zaloni.hiveApi.HiveDbDesc;
 import com.zaloni.hiveApi.HiveTableDesc;
+
+
+import com.google.protobuf.TextFormat.ParseException;
 import com.zaloni.hiveApi.HiveCreate;
 
-
+import java.io.*;
+import java.util.Scanner;
 
 public class ApiTest {
 
-	public static void main(String[] args) throws SQLException {
-	
-    	//HiveCreate.showTable("zaloni");
+	public static void main(String[] args) throws SQLException, org.json.simple.parser.ParseException, JsonParseException, JsonMappingException, IOException {
 		
+//		HiveCreate.showDb();
+//    	HiveCreate.showTable("default");
+
 		/*
 		// Create Database
 		HiveDbDesc Db=new HiveDbDesc();
@@ -51,6 +70,7 @@ public class ApiTest {
 				HiveTableDesc table = new HiveTableDesc();
 				table.setDatabaseName("default");
 				table.setTableName("table7");
+				table.setRowFormat("DELIMITED");
 				table.setColumn(fields);
 		HiveCreate.createTable(table);   			
 
@@ -107,7 +127,7 @@ public class ApiTest {
 		
 		//Change Column name and type of an existing table
 		
-List<Column> fields = new ArrayList<Column>();
+	List<Column> fields = new ArrayList<Column>();
 		
 		Column field1 = new Column();
 		field1.setColumnName("Id");
@@ -224,7 +244,7 @@ HiveCreate.createTable(col);
     /////////////////////////////////////////////////////////////////////////////////////
     	
 	/////////////////////////////////////////////////////////////////////////////
-	Table existingTable = HiveMetadataExtractor.getTable("zaloni", "table12");
+/*	Table existingTable = HiveMetadataExtractor.getTable("zaloni", "table12");
 	//System.out.println(existingTable);
 	
 	Table updatedTableRequest = existingTable.deepCopy();
@@ -257,11 +277,51 @@ HiveCreate.createTable(col);
 	tablePro.put("rawDataSize","10");
 	
 	updatedTableRequest.setParameters(tablePro);
-	TableDifferentiator.compareTable(existingTable, updatedTableRequest);
+	TableDifferentiator.compareTable(existingTable, updatedTableRequest);		*/
 	//System.out.println("New table description to be updated - " + updatedTableRequest);
 
 	
-	//////////////////////////////////////////////////////////////////////////////////////
 	// existingTable Vs updatedTableRequest
-	}
+			
+		//////////////////////////////////////////////////////////////////////////////////////
+        			//Read from file
+ /*       HiveTableDesc hiveTableRequest = new ObjectMapper().readValue(new File("C:\\Users\\rmour\\Desktop\\hack\\jsontest.json"), HiveTableDesc.class);
+        
+        System.out.println(" "+ hiveTableRequest); 
+        
+        //////////////////////////////////////////////////
+      
+        
+        JSONParser parser = new JSONParser();
+        
+        try {
+ 
+            Object obj = parser.parse(new FileReader(
+            		"C:\\Users\\rmour\\Desktop\\hack\\jsontest.json"));
+ 
+            JSONObject jsonObject = (JSONObject) obj;
+ 
+//            HiveTableDesc HiveTableReq = new ObjectMapper().
+            String name = (String) jsonObject.get("Name");
+            String author = (String) jsonObject.get("Author");
+            JSONArray companyList = (JSONArray) jsonObject.get("Company List");
+ 
+            System.out.println("Name: " + name);
+            System.out.println("Author: " + author);
+            System.out.println("\nCompany List:");
+            Iterator<String> iterator = companyList.iterator();
+            while (iterator.hasNext()) {
+                System.out.println(iterator.next());
+            }
+ 
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        
+	*/
+		 HiveTableDesc hiveTableRequest = new ObjectMapper().readValue(new File("C:\\Users\\rmour\\Desktop\\hack\\jsontest.json"), HiveTableDesc.class);
+		Table tableDescStr = new Table();
+		tableDescStr.setDbName("default");
+		
+        }
 }

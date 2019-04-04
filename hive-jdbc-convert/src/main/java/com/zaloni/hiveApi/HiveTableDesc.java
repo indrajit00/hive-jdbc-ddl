@@ -6,13 +6,17 @@ import java.util.Map;
 
 public class HiveTableDesc {
 
+	/**
+	 * rowFormat is for data Delimited if called
+	 * rowFormatSerdeName is for serde class to called
+	 */
 	private String databaseName;
 	private String tableName;
 	private String newTableName;
 	private String location;
 	private String owner;
 	private List<Column> column;
-	private String rowFormatDelimited;
+	private String rowFormat;
 	private String storedAs;
 	private String rowFormatSerdeName;
 	private Map<String,String> serdeProperties;
@@ -184,12 +188,12 @@ public class HiveTableDesc {
 		this.storageDescParams = storageDescParams;
 	}
 
-	public String getRowFormatDelimited() {
-		return rowFormatDelimited;
+	public String getRowFormat() {
+		return rowFormat;
 	}
 
-	public void setRowFormatDelimited(String rowFormatDelimited) {
-		this.rowFormatDelimited = rowFormatDelimited;
+	public void setRowFormat(String rowFormat) {
+		this.rowFormat = rowFormat;
 	}
 
 	public String getStoredAs() {

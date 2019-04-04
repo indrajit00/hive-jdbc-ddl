@@ -33,7 +33,7 @@ public class TableDifferentiator {
 		}
 		if(existingTable.getOwner()!=updatedTable.getOwner())
 		{
-			System.out.println("The owner '"+existingTable.getOwner()+"' is changed to '"+updatedTable.getOwner()+"'");
+			System.out.println("The owner '"+ existingTable.getOwner()+"' is changed to '"+ updatedTable.getOwner()+"'");
 		}
 		if(existingTable.getParameters()!=updatedTable.getParameters())
 		{
@@ -75,6 +75,7 @@ public class TableDifferentiator {
 					if(m.getKey().equals(n.getKey()))
 					{
 						flag++;
+						System.out.println("properties  that are same ---> "+m.getKey()+ " = "+m.getValue()+ " and updated table has "+n.getKey()+" = " +n.getValue());
 						break;
 					}
 					if(!m.getKey().equals(n.getKey()))

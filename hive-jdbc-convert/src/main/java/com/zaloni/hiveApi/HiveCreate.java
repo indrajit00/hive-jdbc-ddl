@@ -9,7 +9,7 @@ import org.apache.commons.collections.MapUtils;
 import org.apache.commons.lang.StringUtils;
 
 /**
- * @author kzaman This is a Utility Class for creating Database,Table
+ * @author rmour This is a Utility Class for creating Database,Table
  */
 public class HiveCreate {
 
@@ -114,6 +114,22 @@ public class HiveCreate {
 			}
 			createHql.deleteCharAt(createHql.length() - 1);
 			createHql.append(")");
+			
+			if (StringUtils.isNotBlank(tableDesc.getRowFormat())) {
+				createHql.append(" ROW FORMAT ")
+					.append("")
+					.append(tableDesc.getRowFormat());
+				
+			}		
+			
+			if (StringUtils.isNotBlank(tableDesc.getRowFormatSerdeName())) {
+				createHql.append(" ROW FORMAT SERDE ");
+				
+					createHql.append("'")
+					.append(tableDesc.getRowFormatSerdeName())
+					.append("'");
+				
+			}		
 			
 			if (StringUtils.isNotBlank(tableDesc.getStoredAs())) {
 				createHql.append(" ").append(tableDesc.getStoredAs()).append(" ");
