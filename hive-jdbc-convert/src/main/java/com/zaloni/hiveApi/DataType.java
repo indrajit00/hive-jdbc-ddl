@@ -5,6 +5,7 @@ public class DataType {
 	private HiveDataType dataType;
 	private String precision;
 	private String scale;
+	
 	public HiveDataType getDataType() {
 		return dataType;
 	}

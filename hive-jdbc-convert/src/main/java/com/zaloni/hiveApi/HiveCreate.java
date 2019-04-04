@@ -1,6 +1,7 @@
 package com.zaloni.hiveApi;
 
 import java.sql.ResultSet;
+
 import java.sql.SQLException;
 import java.util.List;
 import java.util.Map.Entry;
@@ -78,7 +79,8 @@ public class HiveCreate {
 	/**
 	 * @param tableDesc
 	 *            object containing table name,table type,column name,column
-	 *            type,column comment
+	 *            type,column comment,Row format for delimited and serde class name
+	 *            stored as,location
 	 * @throws SQLException
 	 */
 	public static boolean createTable(HiveTableDesc tableDesc) throws SQLException {

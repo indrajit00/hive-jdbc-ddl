@@ -241,10 +241,14 @@ List<Column> fields = new ArrayList<Column>();
 HiveCreate.createTable(col);
 	HiveUpdate.addColumn(col);
 	*/
-    /////////////////////////////////////////////////////////////////////////////////////
-    	
-	/////////////////////////////////////////////////////////////////////////////
-/*	Table existingTable = HiveMetadataExtractor.getTable("zaloni", "table12");
+    
+		/*
+		 * Comparing existing table and updated table
+		 * 
+		 */
+		// existingTable Vs updatedTableRequest
+		
+		/*	Table existingTable = HiveMetadataExtractor.getTable("zaloni", "table12");
 	//System.out.println(existingTable);
 	
 	Table updatedTableRequest = existingTable.deepCopy();
@@ -280,19 +284,22 @@ HiveCreate.createTable(col);
 	TableDifferentiator.compareTable(existingTable, updatedTableRequest);		*/
 	//System.out.println("New table description to be updated - " + updatedTableRequest);
 
-	
-	// existingTable Vs updatedTableRequest
-			
-		//////////////////////////////////////////////////////////////////////////////////////
-        			//Read from file
+		
+		/**
+		 * Read a JSON File from HiveTableDesc
+		 */
+		
  /*       HiveTableDesc hiveTableRequest = new ObjectMapper().readValue(new File("C:\\Users\\rmour\\Desktop\\hack\\jsontest.json"), HiveTableDesc.class);
         
-        System.out.println(" "+ hiveTableRequest); 
+        System.out.println(" "+ hiveTableRequest); 	*/
         
-        //////////////////////////////////////////////////
-      
+       /**
+        * 
+        * Working on how to fetch data from a JSON file 
+        *       
+        */
         
-        JSONParser parser = new JSONParser();
+/*        JSONParser parser = new JSONParser();
         
         try {
  
@@ -318,10 +325,10 @@ HiveCreate.createTable(col);
             e.printStackTrace();
         }
         
-	*/
-		 HiveTableDesc hiveTableRequest = new ObjectMapper().readValue(new File("C:\\Users\\rmour\\Desktop\\hack\\jsontest.json"), HiveTableDesc.class);
+		HiveTableDesc hiveTableRequest = new ObjectMapper().readValue(new File("C:\\Users\\rmour\\Desktop\\hack\\jsontest.json"), HiveTableDesc.class);
 		Table tableDescStr = new Table();
 		tableDescStr.setDbName("default");
 		
+		*/
         }
 }

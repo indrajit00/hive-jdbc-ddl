@@ -11,6 +11,12 @@ import java.util.Map.Entry;
 import org.apache.hadoop.hive.metastore.api.FieldSchema;
 import org.apache.hadoop.hive.metastore.api.Table;
 
+
+/**
+ * Differentiate between existing table and new table created for update
+ * 
+ */
+
 public class TableDifferentiator {
 	
 	public static void compareTable(Table existingTable,Table updatedTable) throws SQLException {
