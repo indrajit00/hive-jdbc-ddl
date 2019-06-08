@@ -1,11 +1,16 @@
 package com.zaloni.hiveApi;
 
+import java.io.File;
+import java.io.IOException;
 import java.sql.SQLException;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 
 import org.apache.commons.lang.StringUtils;
+import org.codehaus.jackson.JsonParseException;
+import org.codehaus.jackson.map.JsonMappingException;
+import org.codehaus.jackson.map.ObjectMapper;
 
 /**
  * @author kzaman This is a Utility class for updating database,table
@@ -125,7 +130,7 @@ public class HiveUpdate {
 	}
  
 	public static void dropTable(String dbname, String tableName, String dropType) throws SQLException {
-		StringBuffer createHql = new StringBuffer("DROP TABLE ").append(dbname).append(tableName).append(" ").append(dropType);
+		StringBuffer createHql = new StringBuffer("DROP TABLE ").append(dbname).append(".").append(tableName).append(" ").append(dropType);
 		HiveQueryExecutor.execute(createHql.toString());
 		System.out.println(tableName + " is dropped successfully");
 	} 
@@ -435,5 +440,6 @@ public class HiveUpdate {
 
 
 	}
+	
 
 }

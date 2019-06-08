@@ -1,6 +1,7 @@
 package com.zaloni.hiveApi;
 
 import java.sql.ResultSet;
+
 import java.sql.SQLException;
 import java.text.DateFormat;
 import java.text.ParseException;
@@ -31,7 +32,8 @@ public class HiveMetadataExtractor {
 	private static Table getTableFromStringDesc(String database, String tableName) throws SQLException {
         String cmd = "DESC FORMATTED ".concat(database).concat(".").concat(tableName);
         ResultSet rs = HiveConnectionProvider.getStatement().executeQuery(cmd);
-
+        
+        System.out.println("Desc "+rs);
         rs.next(); // Start resultSet pointer
         List<List<String>> columnDefinitionList = getColumns(rs);
         System.out.println("Columns :: " + columnDefinitionList);

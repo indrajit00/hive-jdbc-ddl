@@ -50,6 +50,8 @@ public class TableMetadataParser {
     private static final String NAME_STR = "name";
     private static final String COLUMNS_STR = "columns";
     private static final String TABLE_INFO_KEY = "tableInfo";
+    
+    
 
     public static Table populateHiveTableFromJson(String tableDescStr) throws JSONException {
         JSONObject tableDescObject = new JSONObject(tableDescStr);
@@ -71,7 +73,8 @@ public class TableMetadataParser {
 
         // Extract Storage Descriptor
         StorageDescriptor sd = extractStorageDescriptor(tableObject, fieldSchemaList);
-
+        
+        //Extract parameters to the table
         Map<String, String> tableParameters = new HashMap<>();
         if (tableObject != null && tableObject.get(PARAMETERS_KEY) != null) {
             tableParameters = readMapObjectFromJson(tableObject.getJSONObject(PARAMETERS_KEY).toString());

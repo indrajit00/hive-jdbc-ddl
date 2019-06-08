@@ -2,14 +2,14 @@ package com.zaloni.hiveApi;
 
 public class DataType {
 
-	private HiveDataType dataType;
+	private String dataType;
 	private String precision;
 	private String scale;
 	
-	public HiveDataType getDataType() {
+	public String getDataType() {
 		return dataType;
 	}
-	public void setDataType(HiveDataType dataType) {
+	public void setDataType(String dataType) {
 		this.dataType = dataType;
 	}
 	public String getPrecision() {

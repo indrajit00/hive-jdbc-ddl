@@ -1,7 +1,12 @@
 package com.zaloni.hiveApi;
 
+import java.util.ArrayList;
+
+
 import java.util.List;
 import java.util.Map;
+
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 
 public class HiveTableDesc {
@@ -10,9 +15,13 @@ public class HiveTableDesc {
 	 * rowFormat is for data Delimited if called
 	 * rowFormatSerdeName is for serde class to called
 	 */
+	
+	@JsonIgnoreProperties(ignoreUnknown = true)
 	private String databaseName;
 	private String tableName;
 	private String newTableName;
+	private boolean deleted;
+	private boolean fetchTable;
 	private String location;
 	private String owner;
 	private List<Column> column;
@@ -31,7 +40,8 @@ public class HiveTableDesc {
 	private String lastAccessTime;
 	private String protectedMOde;
 	private String retention;
-	private String tableParameters;
+	private Map<String,String> tableParameters;
+	
 	private String dropType;
 	
 	//Table Storage information fields
@@ -42,8 +52,16 @@ public class HiveTableDesc {
 	private String numBuckets;
 	private String bucketColumns;
 	private String sortColumns;
-	private String storageDescParams;
+	private Map<String,String> storageDescParams;
 	
+	
+	public Map<String, String> getStorageDescParams() {
+		return storageDescParams;
+	}
+
+	public void setStorageDescParams(Map<String, String> storageDescParams) {
+		this.storageDescParams = storageDescParams;
+	}
 
 	public String getDatabaseName() {
 		return databaseName;
@@ -81,8 +99,8 @@ public class HiveTableDesc {
 		return column;
 	}
 
-	public void setColumn(List<Column> column) {
-		this.column = column;
+	public void setColumn(List<Column> columnList) {
+		this.column = columnList;
 	}
 	public String getCreateTime() {
 		return createTime;
@@ -116,14 +134,14 @@ public class HiveTableDesc {
 		this.retention = retention;
 	}
 
-	public String getTableParameters() {
+	public Map<String,String> getTableParameters() {
 		return tableParameters;
 	}
-
-	public void setTableParameters(String tableParameters) {
+	public void setTableParameters(Map<String,String> tableParameters) {
 		this.tableParameters = tableParameters;
 	}
 
+	
 	public String getSerDeLibrary() {
 		return serDeLibrary;
 	}
@@ -178,14 +196,6 @@ public class HiveTableDesc {
 
 	public void setSortColumns(String sortColumns) {
 		this.sortColumns = sortColumns;
-	}
-
-	public String getStorageDescParams() {
-		return storageDescParams;
-	}
-
-	public void setStorageDescParams(String storageDescParams) {
-		this.storageDescParams = storageDescParams;
 	}
 
 	public String getRowFormat() {
@@ -268,6 +278,40 @@ public class HiveTableDesc {
 	public void setTemporary(boolean temporary) {
 		this.temporary = temporary;
 	}
+	
+	public boolean isDeleted() {
+		return deleted;
+	}
+
+	public void setDeleted(boolean deleted) {
+		this.deleted = deleted;
+	}
+	
+	public boolean isFetchTable() {
+		return fetchTable;
+	}
+
+	public void setFetchTable(boolean fetchTable) {
+		this.fetchTable = fetchTable;
+	}
+
+
+	@Override
+	public String toString() {
+		return "HiveTableDesc [databaseName=" + databaseName + ", tableName=" + tableName + ", newTableName="
+				+ newTableName + ", deleted=" + deleted + ", fetchTable=" + fetchTable + ", location=" + location
+				+ ", owner=" + owner + ", column=" + column + ", rowFormat=" + rowFormat + ", storedAs=" + storedAs
+				+ ", rowFormatSerdeName=" + rowFormatSerdeName + ", serdeProperties=" + serdeProperties
+				+ ", partitionColumn=" + partitionColumn + ", tableType=" + tableType + ", ifPartition=" + ifPartition
+				+ ", temporary=" + temporary + ", createTime=" + createTime + ", lastAccessTime=" + lastAccessTime
+				+ ", protectedMOde=" + protectedMOde + ", retention=" + retention + ", tableParameters="
+				+ tableParameters + ", dropType=" + dropType + ", serDeLibrary=" + serDeLibrary + ", inputFormat="
+				+ inputFormat + ", outputFormat=" + outputFormat + ", compressed=" + compressed + ", numBuckets="
+				+ numBuckets + ", bucketColumns=" + bucketColumns + ", sortColumns=" + sortColumns
+				+ ", storageDescParams=" + storageDescParams + "]";
+	}
+	
+	
 
 
 }
